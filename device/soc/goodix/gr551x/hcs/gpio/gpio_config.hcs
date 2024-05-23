@@ -1,0 +1,12 @@
+root {
+    platform {
+        gpio_config {
+                match_attr = "goodix_gr55xx_gpio";
+                configNum  = 1;
+                gpioIndex  = [0];
+                pull       = [0];
+                handleMode = [0];
+        }
+    }
+}
+

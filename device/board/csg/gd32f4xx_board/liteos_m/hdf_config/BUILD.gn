@@ -1,0 +1,14 @@
+if (ohos_kernel_type == "liteos_m") {
+  import("//drivers/hdf_core/adapter/khdf/liteos_m/hdf.gni")
+  module_switch = defined(LOSCFG_GD32F4_BOARD_USE_HDF)
+  macro_switch = defined(LOSCFG_DRIVERS_HDF_CONFIG_MACRO)
+  module_name = get_path_info(rebase_path("."), "name")
+  config("public") {
+    include_dirs = [ "$target_gen_dir" ]
+  }
+  hdf_driver(module_name) {
+    hcs_sources = [ "hdf.hcs" ]
+    special_visibility = [ "//device/board/csg/gd32f4xx_board/liteos_m/*" ]
+  }
+}
+

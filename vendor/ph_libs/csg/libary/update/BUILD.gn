@@ -1,0 +1,25 @@
+import("//build/lite/config/component/lite_component.gni") 
+if (defined(ohos_lite)) { 
+    update_libs = [ 
+      "libs/sys_installer/libsys_installer.z.so", 
+      "libs/update_service/libupdate.z.so", 
+      "libs/update_service/libupdateservice.z.so",
+      "libs/updater/libdiff_patch_shared.z.so",
+      "libs/updater/libupdate_hdi_impl.z.so",
+    ] 
+    update_bin = [ 
+      "bin/updater",
+      "bin/updater_binary",
+      "bin/updater_reboot",
+      "bin/write_updater",
+    ] 
+
+    copy("update_release") { 
+        sources = update_libs 
+        outputs = [ "$root_out_dir/csg/update" ] 
+    } 
+    copy("update_release_bin") { 
+        sources = update_bin 
+        outputs = [ "$root_out_dir/csg/update" ] 
+    } 
+}

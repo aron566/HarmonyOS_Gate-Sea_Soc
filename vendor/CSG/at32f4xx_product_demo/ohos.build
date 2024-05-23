@@ -1,0 +1,10 @@
+{
+  "parts": {
+    "product_at32f4xx_product_demo": {
+      "module_list": [
+        "//vendor/CSG/at32f4xx_product_demo:at32f4xx_product_demo"
+      ]
+    }
+  },
+  "subsystem": "product_at32f4xx_product_demo"
+}

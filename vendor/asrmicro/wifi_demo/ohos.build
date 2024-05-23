@@ -1,0 +1,10 @@
+{
+  "parts": {
+    "product_wifi_demo": {
+      "module_list": [
+        "//vendor/asrmicro/wifi_demo:wifi_demo"
+      ]
+    }
+  },
+  "subsystem": "product_wifi_demo"
+}

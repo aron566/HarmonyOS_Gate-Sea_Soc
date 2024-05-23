@@ -1,0 +1,10 @@
+{
+  "parts": {
+    "device_hc32f4_board": {
+      "module_list": [
+        "//device/soc/hdsc/hc32f4xx:hc32f4xx"
+      ]
+    }
+  },
+  "subsystem": "device_hc32f4_board"
+}

@@ -1,0 +1,10 @@
+{
+  "parts": {
+    "device_at32f4_board": {
+      "module_list": [
+        "//device/soc/artery/at32f4xx"
+      ]
+    }
+  },
+  "subsystem": "device_at32f4_board"
+}

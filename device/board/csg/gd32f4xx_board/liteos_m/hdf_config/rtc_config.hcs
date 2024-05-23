@@ -1,0 +1,13 @@
+root {
+    platform {
+        rtc_config {
+            rtc0_config {
+                match_attr = "gd32f4a0_rtc";
+                RtcId = 1;
+                AlarmAmPm = 0;    //RTC Alarm format: 0:AM 1:PM
+                HourFormat = 0;   //RTC Hour format: 0:24-hour format 1:12-hour format
+                AmPm = 0;         //RTC Time format: 0:AM 1:PM
+            }
+        }
+    }
+}

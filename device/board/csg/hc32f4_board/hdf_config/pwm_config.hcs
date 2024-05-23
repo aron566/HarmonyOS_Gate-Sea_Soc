@@ -1,0 +1,22 @@
+root {
+    platform {
+        pwm_config{
+            template pwm_device {
+                serviceName = "";
+                match_attr = "";
+            }
+            device_0 :: pwm_device {
+                match_attr = "hc32_hrpwm_0";
+                num = 0;
+                //使用timerN的PWM功能,目前驱动中只配置了Timer6和TimerA的PWM功能
+                timer = 6;    //6: Timer6 10:TimerA
+                unit = 1;     //TIMER UNIT TIMER6: 1~8:CM_TMR6_1~CM_TMR6_8   TIMERA: 1~12:CM_TMRA_1~CM_TMRA_12
+                ch_count = 1; //Timer6 0:TMR6_CH_A 1:TMR6_CH_B
+                channel = 2;  //TimerA 0:TMRA_CH1 1:TMRA_CH2 2:TMRA_CH3 3:TMRA_CH4
+                port = 5;     //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5:GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                pin =  14;    //GPIO管脚 N:0~15  GPIO_PIN_00~GPIO_PIN_15
+                func = 4;     //GPIO功能选择 N:0~63  GPIO_FUNC_0~GPIO_FUNC_63
+            }
+        }
+    }
+}

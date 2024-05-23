@@ -1,0 +1,10 @@
+{
+  "parts": {
+    "product_hc32f4xx_product_demo": {
+      "module_list": [
+        "//vendor/CSG/hc32f4xx_product_demo:hc32f4xx_product_demo"
+      ]
+    }
+  },
+  "subsystem": "product_hc32f4xx_product_demo"
+}

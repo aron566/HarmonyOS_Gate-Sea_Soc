@@ -1,0 +1,58 @@
+import("//build/lite/config/component/lite_component.gni") 
+if (defined(ohos_lite)) { 
+    security_libs = [ 
+      "libs/access_token/libabilityaccessctrl.z.so", 
+      "libs/access_token/libaccesstoken_common_cxx.z.so", 
+      "libs/access_token/libaccesstoken_communication_adapter_cxx.z.so",
+      "libs/access_token/libaccesstoken_database_cxx.z.so",
+      "libs/access_token/llibaccesstoken_manager_service.z.so",
+      "libs/access_token/llibaccesstoken_sdk.z.so",
+      "libs/access_token/libprivacy_communication_adapter_cxx.z.so",
+      "libs/access_token/libprivacy_manager_service.z.so",
+      "libs/access_token/libprivacy_sdk.z.so",
+      "libs/access_token/llibprivacymanager.z.so",
+      "libs/access_token/libtoken_callback_sdk.z.so",
+      "libs/access_token/libtoken_sync_manager_service.z.so",
+      "libs/access_token/libtokensync_sdk.z.so",
+      "libs/appverify/llibhapverify.z.so",
+      "libs/certificate_manager/libcert_manager_engine_core_standard.z.so",
+      "libs/certificate_manager/libcert_manager_sdk.z.so",
+      "libs/certificate_manager/libcert_manager_service.z.so",
+      "libs/certificate_manager/libcertmanager.z.so",
+      "libs/crypto_framework/libcert_napi.z.so",
+      "libs/crypto_framework/libcrypto_framework_lib.z.so",
+      "libs/crypto_framework/libcrypto_openssl_plugin_lib.z.so",
+      "libs/crypto_framework/libcryptoframework_napi.z.so",
+      "libs/dataclassification/libdata_transit_mgr.z.so",
+      "libs/device_auth/libdeviceauth_sdk.z.so",
+      "libs/device_security_level/libdslm_sdk.z.so",
+      "libs/device_security_level/libdslm_service.z.so",
+      "libs/huks/libdslm_sdk.z.so",
+      "libs/huks/libcipher_shared.z.so",
+      "libs/huks/libcrypto_openssl.z.so",
+      "libs/huks/libhuks.z.so",
+      "libs/huks/libhuks_engine_core_standard.z.so",
+      "libs/huks/libhuks_ndk.z.so",
+      "libs/huks/libhuks_service.z.so",
+      "libs/selinux/libhap_restorecon.z.so",
+      "libs/selinux/libload_policy.z.so",
+      "libs/selinux/libparaperm_checker.z.so",
+      "libs/selinux/libpcre2.z.so",
+      "libs/selinux/librestorecon.z.so",
+      "libs/selinux/libselinux.z.so",
+      "libs/selinux/libsepol.z.so",
+      "libs/selinux/libservice_checker.z.so",
+    ] 
+    security_bin = [ 
+      "bin/deviceauth_service",
+    ] 
+
+    copy("security_release") { 
+        sources = security_libs 
+        outputs = [ "$root_out_dir/csg/security" ] 
+    } 
+    copy("security_release_bin") { 
+        sources = security_bin 
+        outputs = [ "$root_out_dir/csg/security" ] 
+    } 
+}

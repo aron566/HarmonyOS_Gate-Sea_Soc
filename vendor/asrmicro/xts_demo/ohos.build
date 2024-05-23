@@ -1,0 +1,10 @@
+{
+  "parts": {
+    "product_xts_demo": {
+      "module_list": [
+        "//vendor/asrmicro/xts_demo:xts_demo"
+      ]
+    }
+  },
+  "subsystem": "product_xts_demo"
+}

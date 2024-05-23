@@ -1,0 +1,10 @@
+{
+    "subsystem":"device_gs2000_zb202_board",
+    "parts": {
+        "device_gs2000_zb202_board": {
+            "module_list": [
+                "//device/board/gate_sea/gs2000_zb202_board:process_after_build"
+            ]
+        }
+    }
+}

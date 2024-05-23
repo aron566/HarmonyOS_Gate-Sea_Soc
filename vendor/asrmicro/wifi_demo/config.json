@@ -1,0 +1,128 @@
+{
+   "board" : "dev_wifi_a",
+   "device_company" : "lango",
+   "kernel_type" : "liteos_m",
+   "kernel_version" : "3.0.0",
+   "ohos_version" : "OpenHarmony 1.0",
+   "product_adapter_dir" : "//vendor/asrmicro/wifi_demo/hals",
+   "product_name" : "wifi_demo",
+   "subsystems" : [
+      {
+         "components" : [
+            {
+               "component" : "liteos_m",
+               "features" : [
+                  "ohos_kernel_liteos_m_lwip_path = \"//device/soc/asrmicro/asr582x/liteos_m/components/net/lwip-2.1\""
+               ]
+            }
+         ],
+         "subsystem" : "kernel"
+      },
+      {
+         "components" : [
+            {
+               "component" : "hilog_lite",
+               "features" : []
+            },
+            {
+               "component" : "hievent_lite",
+               "features" : []
+            }
+         ],
+         "subsystem" : "hiviewdfx"
+      },
+      {
+         "components" : [
+            {
+               "component" : "samgr_lite",
+               "features" : []
+            }
+         ],
+         "subsystem" : "systemabilitymgr"
+      },
+      {
+         "components" : [
+            {
+               "component" : "wifi_lite",
+               "features" : []
+            },
+            {
+               "component" : "dsoftbus",
+               "features" : []
+            }
+         ],
+         "subsystem" : "communication"
+      },
+      {
+         "components" : [
+            {
+               "component": "utils_lite",
+               "features": [
+                  "utils_lite_feature_file = true",
+                  "utils_lite_feature_timer_task = true",
+                  "utils_lite_feature_kal_timer = true"
+               ]
+            }
+         ],
+         "subsystem" : "commonlibrary"
+      },
+      {
+         "components" : [
+            {
+               "component" : "bootstrap_lite",
+               "features" : []
+            },
+            {
+               "component" : "init_lite",
+               "features":["enable_ohos_startup_init_feature_begetctl_liteos = true"]
+            }
+         ],
+         "subsystem" : "startup"
+      },
+      {
+         "components" : [
+            {
+               "component" : "huks",
+               "features" : [
+                  "disable_huks_binary = true",
+                  "disable_authenticate = true",
+                  "huks_use_hardware_root_key = true",
+                  "huks_config_file = \"hks_config_lite.h\"",
+                  "ohos_security_huks_mbedtls_porting_path = \"//device/soc/asrmicro/asr582x/liteos_m/components/mbedtls\""
+               ]
+            }
+         ],
+         "subsystem" : "security"
+      },
+      {
+         "subsystem": "commonlibrary",
+         "components": [
+           { "component": "kal_timer" }
+         ]
+      },
+      {
+         "components" : [
+            {
+               "component" : "peripheral", 
+               "features" : []
+            }
+         ],
+         "subsystem" : "iothardware"
+      }
+   ],
+   "tests_list" : [
+      {
+         "enable" : "true",
+         "test_modules" : [ "example", "wifi_test" ]
+      }
+   ],
+   "third_party_dir" : "",
+   "type" : "mini",
+   "vendor_adapter_dir" : "//device/soc/asrmicro/asr582x/liteos_m/sdk/adapter",
+   "version" : "3.0",
+   "xts_list" : [
+      {
+         "enable" : "false"
+      }
+   ]
+}

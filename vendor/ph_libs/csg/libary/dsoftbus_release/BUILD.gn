@@ -1,0 +1,36 @@
+import("//build/ohos.gni")
+dsoftbus_libs = [ 
+    "libs/libcoap.z.so", 
+    "libs/libFillpSo.open.z.so", 
+    "libs/libnstackx_congestion.open.z.so",
+    "libs/libnstackx_ctrl.z.so",
+    "libs/libnstackx_dfile.open.z.so",
+    "libs/libnstackx_util.open.z.so",
+    "libs/libsoftbus_adapter.z.so",
+    "libs/libsoftbus_client.z.so",
+    "libs/libsoftbus_server.z.so",
+    "libs/libsoftbus_utils.z.so",
+  ] 
+dsoftbus_bin = [ 
+    "bin/SoftBusDumpDeviceInfo", 
+  ] 
+
+copy("dsoftbus_release_bin") { 
+    sources = dsoftbus_bin 
+    outputs = [ "$root_out_dir/csg/dsoftbus_release/bin" ] 
+}
+
+ohos_copy("dsoftbus_release_lib") {
+    sources = []
+    foreach(dsoftbus_lib, dsoftbus_libs) {
+       sources += [ "${dsoftbus_lib}" ]
+    }
+    outputs = [ "$root_out_dir/csg/dsoftbus_release/libs" ]
+}
+
+lite_component("dsoftbus_lite") { 
+    features = [ 
+      ":dsoftbus_release_bin", 
+      ":dsoftbus_release_lib", 
+    ] 
+} 

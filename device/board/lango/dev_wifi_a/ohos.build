@@ -1,0 +1,10 @@
+{
+  "parts": {
+    "device_dev_wifi_a": {
+      "module_list": [
+        "//device/board/lango/dev_wifi_a:dev_wifi_a"
+      ]
+    }
+  },
+  "subsystem": "device_dev_wifi_a"
+}

@@ -1,0 +1,12 @@
+root {
+    platform {
+        watchdog_config {
+            watchdog0_config {
+                match_attr = "hc32f4a0_watchdog_0";
+                id = 0;           //超时时间timeout = CountPeriod * ClockDiv / PCLK      PCLK = 8000000
+                CountPeriod = 2;  //WDT计数周期 0:256 clock cycle 1:4096 2:16384 3:65536
+                ClockDiv = 6;     //WDT分频因子 0:PLCKx/4 1:16 div 2:128 div 3:256 div 4:512 div 5:1024 div 6:2048 div 7:8192 div
+            }
+        }
+    }
+}

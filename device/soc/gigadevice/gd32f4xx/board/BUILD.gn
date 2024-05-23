@@ -1,0 +1,65 @@
+# Copyright (C) 2022 HiHope Open Source Organization .
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//kernel/liteos_m/liteos.gni")
+module_name = get_path_info(rebase_path("."), "name")
+kernel_module(module_name) {
+  sources = [ "startup/startup_gd32f450_470.s" ]
+
+  sources += [
+    "src/main.c",
+    "src/dprintf.c",
+    "src/gd32f470z_eval.c",
+    "src/gd32f4xx_it.c",
+    "src/systick.c",
+    "//third_party/cJSON/cJSON.c",
+  ]
+
+  include_dirs = [
+    ".",
+    "./include",
+    "//third_party/cJSON",
+  ]
+}
+
+config("public") {
+  ldflags = [
+      "-Wl,--gc-sections",
+      "-Wl,-T" + rebase_path("startup/gd32f4xx_flash.ld"),
+      "-Wl,-u_printf_float",
+      "-Wl,-Map=" + rebase_path("$root_out_dir/bin/gd32f4xx_board.map"),
+  ]
+
+  include_dirs = [
+    ".",
+    "include",
+    "../libraries/GD32F4xx_Firmware_Library/CMSIS/GD/GD32F4xx/Include",
+    "../libraries/GD32F4xx_Firmware_Library/GD32F4xx_standard_peripheral/Include",
+    "../libraries/GD32F4xx_standard_peripheral/Include",
+    "../libraries/drivers/inc",
+    "//drivers/hdf_core/framework/core/common/include/manager",
+    "//drivers/hdf_core/framework/include/utils",
+    "//drivers/hdf_core/adapter/khdf/liteos_m/osal/include",
+    "//drivers/hdf_core/framework/include/core",
+    "//drivers/hdf_core/framework/core/common/include/host",
+    "//drivers/hdf_core/framework/core/common/include/host",
+    "//kernel/liteos_m/arch/arm/cortex-m4/gcc/"
+  ]
+
+  libs = [
+    #"gcc",
+    #"m",
+    #"c",
+    #"nosys",
+  ]
+}

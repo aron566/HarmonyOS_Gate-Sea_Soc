@@ -1,0 +1,17 @@
+root {
+    misc {
+        fs_config {
+            littlefs_config {
+                    match_attr = "littlefs_config";
+                    mount_points = "/a";
+                    block_size = 4096;
+                    block_count = 1024;
+                    read_size = 1024;
+                    prog_size = 1024;
+                    cache_size = 2048;
+                    lookahead_size = 2048;
+                    block_cycles = 500;
+            }
+        }
+    }
+}

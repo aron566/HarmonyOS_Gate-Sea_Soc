@@ -1,0 +1,65 @@
+root {
+    module = "goodix,gr551x";
+    device_info {
+        match_attr = "hdf_manager";
+        template host {
+            hostName = "";
+            priority = 100;
+            template device {
+                template deviceNode {
+                    policy = 0;
+                    priority = 100;
+                    preload = 0;
+                    permission = 0664;
+                    moduleName = "";
+                    serviceName = "";
+                    deviceMatchAttr = "";
+                }
+            }
+        }
+        platform :: host {
+            hostName = "platform_host";
+            priority = 50;
+            device_gpio :: device {
+                device0 :: deviceNode {
+                    policy = 0;
+                    priority = 10;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_GPIO";
+                    serviceName = "HDF_PLATFORM_GPIO";
+                    deviceMatchAttr = "goodix_gr55xx_gpio";
+                }
+            }
+            device_uart :: device {
+                device0 :: deviceNode {
+                    policy = 1;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_0";
+                    deviceMatchAttr = "goodix_gr55xx_uart_0";
+                }
+                device1 :: deviceNode {
+                    policy = 2;
+                    permission = 0644;
+                    priority = 40;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_1";
+                    deviceMatchAttr = "goodix_gr55xx_uart_1";
+                }
+            }
+        }
+        misc :: host {
+            hostName = "misc_host";
+            priority = 50;
+            fs :: device {
+                littlefs :: deviceNode {
+                    policy = 0;
+                    priority = 100;
+                    moduleName = "HDF_FS_LITTLEFS";
+                    deviceMatchAttr = "littlefs_config";
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,55 @@
+# Copyright (c) 2022 Hunan OpenValley Digital Industry Development Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//kernel/liteos_m/liteos.gni")
+
+if (ohos_kernel_type == "liteos_m") {
+  module_name = get_path_info(rebase_path("."), "name")
+  module_group(module_name) {
+    modules = [ "liteos_m" ]
+  }
+}
+
+group("process_after_build") {
+  deps = [
+    ":copy_bin",
+    ":elf2bin",
+  ]
+}
+
+ESP_SDK_PATH = "//device/soc/esp/esp32/components/"
+import("${ESP_SDK_PATH}sdkconfig.gni")
+build_ext_component("elf2bin") {
+  exec_path = rebase_path(ESP_SDK_PATH)
+  _input_boot_file = rebase_path("$root_out_dir/bin/bootloader.elf")
+  _output_boot_file = rebase_path("$root_out_dir/bin/bootloader.bin")
+  _input_app_file = rebase_path("$root_out_dir/OHOS_Image")
+  _output_app_file = rebase_path("$root_out_dir/OHOS_Image.bin")
+  command =  "esptool.py --chip ${CONFIG_IDF_TARGET} elf2image --flash_mode ${CONFIG_ESPTOOLPY_FLASHMODE} --flash_freq ${CONFIG_ESPTOOLPY_FLASHFREQ} --flash_size ${CONFIG_ESPTOOLPY_FLASHSIZE} --min-rev 0 --elf-sha256-offset 0xb0 -o ${_output_app_file} ${_input_app_file} && "
+  command += "esptool.py --chip ${CONFIG_IDF_TARGET} elf2image --flash_mode ${CONFIG_ESPTOOLPY_FLASHMODE} --flash_freq ${CONFIG_ESPTOOLPY_FLASHFREQ} --flash_size ${CONFIG_ESPTOOLPY_FLASHSIZE} -o ${_output_boot_file} ${_input_boot_file}"
+  deps = [
+    "//build/lite:ohos",
+    "//kernel/liteos_m:build_kernel_image",
+  ]
+}
+
+build_ext_component("copy_bin") {
+  exec_path = rebase_path(".", root_build_dir)
+  _output_dir = rebase_path("$root_out_dir")
+  command = "mkdir -p ${_output_dir}/bin && cp ${_output_dir}/OHOS_Image.bin ${_output_dir}/bin/"
+  deps = [
+    ":elf2bin",
+    "//build/lite:ohos",
+    "//kernel/liteos_m:build_kernel_image",
+  ]
+}

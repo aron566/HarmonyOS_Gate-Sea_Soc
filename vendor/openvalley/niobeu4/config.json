@@ -1,0 +1,130 @@
+{
+  "product_name": "iotlink",
+  "type": "mini",
+  "version": "3.0",
+  "ohos_version": "OpenHarmony 3.2",
+  "device_company": "openvalley",
+  "board": "niobeu4",
+  "kernel_type": "liteos_m",
+  "kernel_version": "3.0.0",
+  "subsystems": [
+    {
+      "subsystem": "hiviewdfx",
+      "components": [
+        {
+          "component": "hilog_lite",
+          "features": []
+        },
+        {
+          "component": "hievent_lite",
+          "features": []
+        }
+      ]
+    },
+    {
+      "subsystem": "systemabilitymgr",
+      "components": [
+        {
+          "component": "samgr_lite",
+          "features": []
+        }
+      ]
+    },
+    {
+      "subsystem": "startup",
+      "components": [
+        {
+          "component": "bootstrap_lite",
+          "features": []
+        },
+        {
+          "component": "init_lite",
+          "features": [
+            "enable_ohos_startup_init_feature_begetctl_liteos = true"
+          ]
+        },
+        {
+          "component": "syspara_lite",
+          "features": []
+        }
+      ]
+    },
+    {
+      "subsystem": "kernel",
+      "components": [
+        {
+          "component": "liteos_m",
+          "features": [
+            "ohos_kernel_liteos_m_lwip_path = \"//device/board/openvalley/niobeu4/liteos_m/third_party_adapter/lwip-2.1\""
+          ]
+        }
+      ]
+    },
+    {
+      "subsystem": "commonlibrary",
+      "components": [
+        { "component": "file", "features": [] },
+        { "component": "timer_task", "features": [] },
+        { "component": "kal_timer", "features": [] }
+      ]
+    },
+    {
+      "subsystem": "security",
+      "components": [
+        {
+          "component": "huks",
+          "features": [
+            "huks_use_lite_storage = true",
+            "huks_use_hardware_root_key = true",
+            "huks_config_file = \"hks_config_lite.h\"",
+            "huks_key_store_path = \"storage\"",
+            "ohos_security_huks_mbedtls_porting_path = \"//device/board/openvalley/niobeu4/liteos_m/third_party_adapter/mbedtls\""
+          ]
+        }
+      ]
+    },
+    {
+      "subsystem": "updater",
+      "components": [
+        {
+          "component": "ota_lite",
+          "optional": "true"
+        }
+      ]
+    },
+    {
+      "subsystem": "iothardware",
+      "components": [
+        { "component": "peripheral", "features":[] }
+      ]
+    },
+    {
+      "subsystem": "communication",
+      "components": [
+        {
+          "component": "wifi_lite",
+          "optional": "true"
+        }
+      ]
+    },
+    {
+      "subsystem": "xts",
+      "components": [
+        {
+          "component": "xts_acts",
+          "features": [
+            "config_ohos_xts_acts_utils_lite_kv_store_data_path = \"/openvalley\"",
+            "enable_ohos_test_xts_acts_use_thirdparty_lwip = false"
+          ]
+        },
+        {
+          "component": "xts_tools",
+          "features": []
+        }
+      ]
+    }
+  ],
+  "vendor_adapter_dir": "//device/board/openvalley/niobeu4/liteos_m",
+  "third_party_dir": "//third_party",
+  "product_adapter_dir": "//vendor/openvalley/niobeu4/hals"
+}

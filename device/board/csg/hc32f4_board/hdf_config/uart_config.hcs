@@ -1,0 +1,218 @@
+root {
+    platform {
+        template uart_config {
+            match_attr = "";
+            BaudRate = 115200;
+        }
+        uart1_config :: uart_config {
+            match_attr = "hc32f4a0_uart_1";
+            //uart config
+            num = 1;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 0;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            RxPin = 10;             //GPIO Function Selection
+            RxFunc = 20;           //GPIO Function Selection
+            TxPort = 0;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            TxPin = 9;             //GPIO Function Selection
+            TxFunc = 20;           //GPIO Function Selection
+            IRQnRi = 2;           //Peripheral Interrupt type
+            IntSrcRi = 301;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 0;         //0:DMA1 1:DMA2
+            RxDmaCh = 0;           //0:DMA_CH0 1:DMA_CH1
+            TxDmaUnit = 0;         //0:DMA1 1:DMA2
+            TxDmaCh = 1;           //0:DMA_CH0 1:DMA_CH1
+            TxDmaIRQn = 1;         //Tx DMA Interrupt type
+        }
+        uart2_config :: uart_config {
+            match_attr = "hc32f4a0_uart_2";
+            //uart config
+            num = 2;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 3;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            RxPin = 6;             //GPIO Function Selection
+            RxFunc = 20;           //GPIO Function Selection
+            TxPort = 3;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            TxPin = 5;             //GPIO Function Selection
+            TxFunc = 20;           //GPIO Function Selection
+            IRQnRi = 4;           //Peripheral Interrupt type
+            IntSrcRi = 308;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 1;         //0:DMA1 1:DMA2
+            RxDmaCh = 0;           //0:DMA_CH0 1:DMA_CH1
+            TxDmaUnit = 1;         //0:DMA1 1:DMA2
+            TxDmaCh = 1;           //0:DMA_CH0 1:DMA_CH1
+            TxDmaIRQn = 3;         //Tx DMA Interrupt type
+        }
+        uart3_config :: uart_config {
+            match_attr = "hc32f4a0_uart_3";
+            //uart config
+            num = 3;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 0;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            RxPin = 5;             //GPIO Function Selection
+            RxFunc = 37;           //GPIO Function Selection
+            TxPort = 0;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            TxPin = 6;             //GPIO Function Selection
+            TxFunc = 36;           //GPIO Function Selection
+            IRQnRi = 5;           //Peripheral Interrupt type
+            IntSrcRi = 333;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 1;         //0:DMA1 1:DMA2
+            RxDmaCh = 2;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaUnit = 1;         //0:DMA1 1:DMA2
+            TxDmaCh = 3;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaIRQn = 6;         //Tx DMA Interrupt type
+        }
+        uart4_config :: uart_config {
+            match_attr = "hc32f4a0_uart_4";
+            //uart config
+            num = 4;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 4;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            RxPin = 8;             //GPIO Function Selection
+            RxFunc = 33;           //GPIO Function Selection
+            TxPort = 4;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            TxPin = 9;             //GPIO Function Selection
+            TxFunc = 32;           //GPIO Function Selection
+            IRQnRi = 7;           //Peripheral Interrupt type
+            IntSrcRi = 337;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 0;         //0:DMA1 1:DMA2
+            RxDmaCh = 2;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaUnit = 0;         //0:DMA1 1:DMA2
+            TxDmaCh = 3;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaIRQn = 8;         //Tx DMA Interrupt type
+        }
+        uart5_config :: uart_config {
+            match_attr = "hc32f4a0_uart_5";
+            //uart config
+            num = 5;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 7;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 7:H
+            RxPin = 6;             //GPIO Function Selection
+            RxFunc = 35;           //GPIO Function Selection
+            TxPort = 7;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 7:H
+            TxPin = 7;             //GPIO Function Selection
+            TxFunc = 34;           //GPIO Function Selection
+            IRQnRi = 7;           //Peripheral Interrupt type
+            IntSrcRi = 366;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 0;         //0:DMA1 1:DMA2
+            RxDmaCh = 2;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaUnit = 0;         //0:DMA1 1:DMA2
+            TxDmaCh = 3;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaIRQn = 8;         //Tx DMA Interrupt type
+        }
+        uart6_config :: uart_config {
+            match_attr = "hc32f4a0_uart_6";
+            //uart config
+            num = 6;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 2;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            RxPin = 7;             //GPIO Function Selection
+            RxFunc = 20;           //GPIO Function Selection
+            TxPort = 2;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            TxPin = 6;             //GPIO Function Selection
+            TxFunc = 20;           //GPIO Function Selection
+            IRQnRi = 11;           //Peripheral Interrupt type
+            IntSrcRi = 370;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 1;         //0:DMA1 1:DMA2
+            RxDmaCh = 4;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaUnit = 1;         //0:DMA1 1:DMA2
+            TxDmaCh = 5;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaIRQn = 12;         //Tx DMA Interrupt type
+        }
+        uart7_config :: uart_config {
+            match_attr = "hc32f4a0_uart_7";
+            //uart config
+            num = 7;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 5;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            RxPin = 6;             //GPIO Function Selection
+            RxFunc = 20;           //GPIO Function Selection
+            TxPort = 5;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            TxPin = 7;             //GPIO Function Selection
+            TxFunc = 20;           //GPIO Function Selection
+            IRQnRi = 13;           //Peripheral Interrupt type
+            IntSrcRi = 391;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 0;         //0:DMA1 1:DMA2
+            RxDmaCh = 6;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaUnit = 1;         //0:DMA1 1:DMA2
+            TxDmaCh = 6;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaIRQn = 14;         //Tx DMA Interrupt type
+        }
+        uart8_config :: uart_config {
+            match_attr = "hc32f4a0_uart_8";
+            //uart config
+            num = 8;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 4;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            RxPin = 0;             //GPIO Function Selection
+            RxFunc = 20;           //GPIO Function Selection
+            TxPort = 4;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            TxPin = 1;             //GPIO Function Selection
+            TxFunc = 20;           //GPIO Function Selection
+            IRQnRi = 15;           //Peripheral Interrupt type
+            IntSrcRi = 396;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 0;         //0:DMA1 1:DMA2
+            RxDmaCh = 7;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaUnit = 1;         //0:DMA1 1:DMA2
+            TxDmaCh = 7;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaIRQn = 16;         //Tx DMA Interrupt type
+        }
+        uart9_config :: uart_config {
+            match_attr = "hc32f4a0_uart_9";
+            //uart config
+            num = 9;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 3;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            RxPin = 0;             //GPIO Function Selection
+            RxFunc = 37;           //GPIO Function Selection
+            TxPort = 3;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            TxPin = 1;             //GPIO Function Selection
+            TxFunc = 36;           //GPIO Function Selection
+            IRQnRi = 17;           //Peripheral Interrupt type
+            IntSrcRi = 423;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 0;         //0:DMA1 1:DMA2
+            RxDmaCh = 0;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaUnit = 1;         //0:DMA1 1:DMA2
+            TxDmaCh = 0;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaIRQn = 18;         //Tx DMA Interrupt type
+        }
+        uart10_config :: uart_config {
+            match_attr = "hc32f4a0_uart_10";
+            //uart config
+            num = 10;               // n: USARTn
+            enable = 1;
+            //uart pin config
+            RxPort = 4;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            RxPin = 10;             //GPIO Function Selection
+            RxFunc = 39;           //GPIO Function Selection
+            TxPort = 4;            //0:A 1:B 2:C 3:D 4:E 5:F 6:G 
+            TxPin = 11;             //GPIO Function Selection
+            TxFunc = 38;           //GPIO Function Selection
+            IRQnRi = 19;           //Peripheral Interrupt type
+            IntSrcRi = 428;       //Peripheral Interrupt number
+            //DMA config
+            RxDmaUnit = 0;         //0:DMA1 1:DMA2
+            RxDmaCh = 6;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaUnit = 1;         //0:DMA1 1:DMA2
+            TxDmaCh = 6;           //0:DMA_CH0 1:DMA_CH1 2:DMA_CH2 3:DMA_CH3
+            TxDmaIRQn = 20;         //Tx DMA Interrupt type
+        }
+    }
+}

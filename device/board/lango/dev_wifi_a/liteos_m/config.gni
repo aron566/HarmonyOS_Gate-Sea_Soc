@@ -1,0 +1,157 @@
+# Copyright (c) 2022 ASR Microelectronics (Shanghai) Co., Ltd. All rights reserved.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Kernel type, e.g. "linux", "liteos_a", "liteos_m".
+kernel_type = "liteos_m"
+
+# Kernel version.
+kernel_version = "3.0.0"
+
+# Board CPU type, e.g. "cortex-a7", "riscv32".
+board_cpu = "cortex-m4"
+
+# Board arch, e.g.  "armv7-a", "rv32imac".
+board_arch = ""
+
+# Toolchain name used for system compiling.
+# E.g. gcc-arm-none-eabi, arm-linux-harmonyeabi-gcc, ohos-clang,  riscv32-unknown-elf.
+# Note: The default toolchain is "ohos-clang". It's not mandatory if you use the default toochain.
+board_toolchain = "arm-none-eabi"
+
+#use_board_toolchain = true
+
+# The toolchain path instatlled, it's not mandatory if you have added toolchian path to your ~/.bashrc.
+# board_toolchain_path = rebase_path("//device/soc/asrmicro/gcc/gcc-arm-none-eabi/Linux64/bin")
+board_toolchain_path = ""
+
+# Compiler prefix.
+board_toolchain_prefix = "arm-none-eabi-"
+
+# Compiler type, "gcc" or "clang".
+board_toolchain_type = "gcc"
+
+# config.json parse
+if (product_path != "") {
+  product_conf = read_file("${product_path}/config.json", "json")
+  product_name = product_conf.product_name
+  xts_list = product_conf.xts_list
+  tests_list = product_conf.tests_list
+}
+
+# Board related common compile flags.
+
+board_cflags = [
+  "-mfloat-abi=softfp",
+  "-mcpu=cortex-m4",
+  "-mthumb",
+  "-mthumb-interwork",
+  "-mfloat-abi=softfp",
+  "-mfpu=fpv4-sp-d16",
+  "-W",
+  "-std=gnu99",
+  "-fdata-sections",
+  "-ffunction-sections",
+  "-fno-builtin",
+  "-fno-strict-aliasing",
+
+  #"-fno-short-enums",
+  "-ggdb",
+  "-Wall",
+  "-Wfatal-errors",
+  "-fsigned-char",
+  "-fno-common",
+  "-std=gnu11",
+
+  #"-std=c99",
+  "-Wno-unused-label",
+  "-DDUET_CM4",
+  "-D__FPU_PRESENT=1",
+
+  #"-D__FPU_USED=1",
+  #"-DLWIP_2_1_2",
+  #"-DLWIP_DHCP",
+  #"-D_POSIX_SOURCE",
+  #"-D_GNU_SOURCE=1",
+  "-DCFG_NAN_CONFIG",
+  "-D__LITEOS_M__",
+  "-Wno-unused-parameter",
+  "-Wno-sign-compare",
+  "-Wno-parentheses",
+  "-Wno-cast-function-type",
+]
+
+board_cxx_flags = board_cflags
+
+board_ld_flags = [
+  "-mcpu=cortex-m4",
+  "-mthumb",
+  "-mthumb-interwork",
+  "-mfloat-abi=softfp",
+  "-mfpu=fpv4-sp-d16",
+  "-W",
+]
+
+# Newlib adapt.
+board_ld_flags += [
+  "-Wl,--wrap=_free_r",
+  "-Wl,--wrap=_malloc_usable_size_r",
+  "-Wl,--wrap=_malloc_r",
+  "-Wl,--wrap=_memalign_r",
+  "-Wl,--wrap=_realloc_r",
+  "-Wl,--wrap=printf",
+  "-Wl,--wrap=sprintf",
+  "-Wl,--wrap=snprintf",
+  "-Wl,--wrap=vprintf",
+  "-Wl,--wrap=vsprintf",
+  "-Wl,--wrap=vsnprintf",
+]
+
+# Board related headfiles search path.
+board_include_dirs = [
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/drivers/platform/system/include/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/drivers/platform/CMSIS/Include/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/drivers/platform/misc/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/drivers/kv/include/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/drivers/driver/inc/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/drivers/common/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/drivers/include/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/drivers/iperf/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/config/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/liteos_m/",
+  "//kernel/liteos_m/kernel/arch/arm/cortex-m4/gcc/",
+  "//kernel/liteos_m/kernel/arch/include/",
+  "//kernel/liteos_m/utils/",
+  "//kernel/liteos_m/kal/cmsis/",
+  "//device/soc/asrmicro/asr582x/liteos_m/sdk/rtos",
+  "//commonlibrary/utils_lite/kal/timer/",
+  "//commonlibrary/utils_lite/include/",
+  "//third_party/bounds_checking_function/include",
+  "//kernel/liteos_m/kernel/include/",
+  "//kernel/liteos_m/kal/posix/include/",
+  "//kernel/liteos_m/components/exchook/",
+  "//third_party/openssl",
+  "//third_party/openssl/include",
+  "//third_party/openssl/crypto/include",
+  "//third_party/openssl/crypto/ec",
+]
+board_include_dirs += []
+
+# Board adapter dir for OHOS components.
+board_adapter_dir = ""
+
+# Sysroot path.
+board_configed_sysroot = ""
+
+# Board storage type, it used for file system generation.
+storage_type = ""
+#ohos_build_type = "release"

@@ -1,0 +1,50 @@
+# Copyright (c) 2022 Hihope Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//kernel/liteos_m/liteos.gni")
+
+module_name = get_path_info(rebase_path("."), "name")
+kernel_module(module_name) {
+  #if (defined(LOSCFG_FS_LITTLEFS) && defined(LOSCFG_DRIVERS_HDF_PLATFORM_SPI)) {
+  if (defined(LOSCFG_FS_LITTLEFS)) {
+    sources = [
+      #"src/fs_init.c",
+      "src/fs_init_sdk.c",
+      "src/w25qxx.c",
+      "src/qspi.c",
+      "src/littlefs.c",
+    ]
+    #if (defined(LOSCFG_MTHS_USE_HDF) &&
+    #    defined(LOSCFG_DRIVERS_HDF_CONFIG_MACRO)) {
+    #  deps = [ "//device/board/csg/stm32l4xx_board/liteos_m/hdf_config" ]
+    #}
+  }
+}
+
+config("public") {
+  #if (defined(LOSCFG_FS_LITTLEFS) && defined(LOSCFG_DRIVERS_HDF_PLATFORM_SPI)) {
+  if (defined(LOSCFG_FS_LITTLEFS)) {
+    include_dirs = [
+      "include",
+      "//device/board/csg/stm32l4_board/liteos_m/bsp/include",
+      "//drivers/hdf_core/framework/include/platform",
+      "//drivers/hdf_core/framework/include/utils",
+      "//drivers/hdf_core/adapter/khdf/liteos_m/osal/include",
+      "//drivers/hdf_core/framework/include/osal",
+      "//drivers/hdf_core/framework/include/core",
+      "//drivers/hdf_core/framework/core/host/include",
+      "//drivers/hdf_core/framework/core/common/include/host",
+      "//kernel/liteos_m/components/fs/vfs",
+    ]
+  }
+}

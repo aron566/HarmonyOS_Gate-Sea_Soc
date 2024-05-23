@@ -1,0 +1,87 @@
+root {
+    platform {
+        spi_config {
+            spi0_config {
+                match_attr = "hc32f4a0_spi_0";
+                busNum = 0;            //bus num
+                SpiCSPort = 2;         //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5:GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                SpiCSPin  = 7;         //GPIO管脚  N:0~15 -> GPIO_PIN_00~GPIO_PIN_15
+                SpiSckPort = 1;
+                SpiSckPin = 14;
+                SpiSckFunc = 40;
+                SpiMosiPort = 1;
+                SpiMosiPin = 13;
+                SpiMosiFunc = 41;
+                SpiMisoPort = 1;
+                SpiMisoPin = 12;
+                SpiMisoFunc = 42;
+                SpiUnit = 0;           //SPI单元 0: SPI1 1:SPI2 2:SPI3 3:SPI4 4:SPI5 5:SPI6
+                WireMode = 1;          //SPI线模式 0:4线 1:3线
+                TransMode = 0;         //SPI传输模式 0:全双工  1:Send only
+                MasterSlave = 1;       //SPI主丛模式 0:Slave  1:Master
+                Parity = 0;            //SPI奇偶校验选择 0:invalid 1:even parity 2:odd parity
+                SpiMode = 0;           //SPI模式 0:CPHA=0,CPOL=0 1:CPHA=0,CPOL=1 2:CPHA=1,CPOL=0 3:CPHA=1,CPOL=1
+                BaudRatePrescaler = 1; //SPI波特率分频 0:div2 1:div4 2:div8 3:div16 4:div32 5:div64 6:div128 7:div256
+                DataBits = 4;          //SPI数据位 N:0~12->SPI_DATA_SIZE_4BIT~SPI_DATA_SIZE_16BIT 
+                                       //13:SPI_DATA_SIZE_20BIT 14:SPI_DATA_SIZE_24BIT 15:SPI_DATA_SIZE_32BIT
+                FirstBit = 0;          //MSB优先或LSB优先 0:MSB 1:LSB
+            }
+            spi1_config {
+                match_attr = "hc32f4a0_qspi";
+                busNum = 1;            //bus num
+                QspiCSPort = 2;        //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5:GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                QspiCSPin  = 7;        //GPIO管脚  N:0~15 -> GPIO_PIN_00~GPIO_PIN_15
+                QspiCSFunc = 18;       //GPIO功能选择  N: 0~63 -> GPIO_FUNC_0~GPIO_FUNC_63
+                QspiSckPort = 1;
+                QspiSckPin = 14;
+                QspiSckFunc = 18;
+                QspiIo0Port = 1;
+                QspiIo0Pin = 13;
+                QspiIo0Func = 18;
+                QspiIo1Port = 1;
+                QspiIo1Pin = 12;
+                QspiIo1Func = 18;
+                QspiIo2Port = 1;
+                QspiIo2Pin = 10;
+                QspiIo2Func = 18;
+                QspiIo3Port = 3;
+                QspiIo3Pin = 11;
+                QspiIo3Func = 18;
+                ClockDiv = 3;     //QSPI时钟分频. N:2~64 -> QSPI_CLK_DIV2~QSPI_CLK_DIV64
+                ReadMode = 5;     //QSPI读取模式  0:标准读 1:快速读 2:二线式输出快速读取 3:二线式输入输出快速读取  4:四线式输出快速读取  5:四线式输入输出快速读取  6:自定义标准读取  7:自定义快速读取
+                PrefetchMode = 1; //QSPI预取方式  0:不使用预取 1:在字节边缘处停止预取 2:立即在当前位置停止预取
+                DummyCycle = 3;   //QSPI虚拟周期  N:3~18 -> QSPI_DUMMY_CYCLE3~QSPI_DUMMY_CYCLE18
+                AddrWidth = 2;    //QSPI地址宽度  0:8bit 1:16bit 2:24bit 3:32 bits and don't use 4-byte address read instruction code 4:32 bits and use 4-byte address read instruction code
+                SetupTime = 1;    //QSPI QSSN设置时间 0:QSPI_QSSN_SETUP_ADVANCE_QSCK0P5 1:QSPI_QSSN_SETUP_ADVANCE_QSCK1P5
+                ReleaseTime = 1;  //QSPI QSSN释放的延迟时间 0: QSPI_QSSN_RELEASE_DELAY_QSCK0P5 1:QSPI_QSSN_RELEASE_DELAY_QSCK1P5 
+                                  //2:QSPI_QSSN_RELEASE_DELAY_QSCK32 3:QSPI_QSSN_RELEASE_DELAY_QSCK128 4:QSPI_QSSN_RELEASE_DELAY_INFINITE
+                IntervalTime = 1; //QSPI QSSN最小间隔时间. N:1~16 -> QSPI_QSSN_INTERVAL_QSCK1~QSPI_QSSN_INTERVAL_QSCK16
+            }
+            spi2_config {
+                match_attr = "hc32f4a0_spi_2";
+                busNum = 2;            //bus num
+                SpiCSPort = 3;         //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5:GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                SpiCSPin  = 9;         //GPIO管脚  N:0~15 -> GPIO_PIN_00~GPIO_PIN_15
+                SpiSckPort = 3;
+                SpiSckPin = 8;
+                SpiSckFunc = 46;
+                SpiMosiPort = 1;
+                SpiMosiPin = 15;
+                SpiMosiFunc = 47;
+                SpiMisoPort = 3;
+                SpiMisoPin = 10;
+                SpiMisoFunc = 48;
+                SpiUnit = 2;           //SPI单元 0: SPI1 1:SPI2 2:SPI3 3:SPI4 4:SPI5 5:SPI6
+                WireMode = 1;          //SPI线模式 0:4线 1:3线
+                TransMode = 0;         //SPI传输模式 0:全双工  1:Send only
+                MasterSlave = 1;       //SPI主丛模式 0:Slave  1:Master
+                Parity = 0;            //SPI奇偶校验选择 0:invalid 1:even parity 2:odd parity
+                SpiMode = 0;           //SPI模式 0:CPHA=0,CPOL=0 1:CPHA=0,CPOL=1 2:CPHA=1,CPOL=0 3:CPHA=1,CPOL=1
+                BaudRatePrescaler = 1; //SPI波特率分频 0:div2 1:div4 2:div8 3:div16 4:div32 5:div64 6:div128 7:div256
+                DataBits = 4;          //SPI数据位 N:0~12->SPI_DATA_SIZE_4BIT~SPI_DATA_SIZE_16BIT 
+                                       //13:SPI_DATA_SIZE_20BIT 14:SPI_DATA_SIZE_24BIT 15:SPI_DATA_SIZE_32BIT
+                FirstBit = 0;          //MSB优先或LSB优先 0:MSB 1:LSB
+            }
+        }
+    }
+}

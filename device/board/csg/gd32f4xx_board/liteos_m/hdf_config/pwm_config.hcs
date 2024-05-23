@@ -1,0 +1,30 @@
+root {
+    platform {
+        pwm_config{
+            template pwm_device {
+                serviceName = "";
+                match_attr = "";
+            }
+            device_0 :: pwm_device {
+                match_attr = "gd32_hrpwm_0";
+                num = 0;      //PWM devices number
+                timer = 2;    //TIMER选择：0~13, 0:TIMER0, 1:TIMER1 ... 13:TIMER13
+                ch_num = 2;   //所用TIMER的PWM输出通道数
+                channel = [0, 1];    //0:CH_0 ,1:CH_1, 2:CH_2 ,3:CH_3
+                port = [1, 1];       //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5:GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                pin =  [4, 5];       //GPIO管脚 N:0~15  GPIO_PIN_0~GPIO_PIN_15
+                func = [2, 2];       //refer to GD32F470xx pin alternate functions
+            }
+            device_1 :: pwm_device {
+                match_attr = "gd32_hrpwm_1";
+                num = 1;      //PWM devices number
+                timer = 1;    //TIMER选择：0~13, 0:TIMER0, 1:TIMER1 ... 13:TIMER13
+                ch_num = 4;   //所用TIMER的PWM输出通道数
+                channel = [0, 1, 2, 3];    //0:CH_0 ,1:CH_1, 2:CH_2 ,3:CH_3
+                port = [1, 1, 1, 1];       //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5:GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                pin =  [8, 9, 10, 11];     //GPIO管脚 N:0~15  GPIO_PIN_0~GPIO_PIN_15
+                func = [1, 1, 1, 1];       //refer to GD32F470xx pin alternate functions
+            }
+        }
+    }
+}

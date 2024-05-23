@@ -1,0 +1,63 @@
+root {
+    platform {
+        template uart_controller {
+            match_attr = "";
+            id = 0;
+            baudrate = 115200;
+
+            pin_tx_type = 0;
+            pin_tx_pin = 0;
+            pin_tx_mux = 0;
+            pin_tx_pull = 0;
+
+            pin_rx_type = 0;
+            pin_rx_pin = 0;
+            pin_rx_mux = 0;
+            pin_rx_pull = 0;
+
+            use_mode_type = 0;
+            use_mode_tx_dma_ch = 0;
+            use_mode_rx_dma_ch = 0;
+
+            rx_timeout_mode = 1;
+        }
+        controller_uart0 :: uart_controller {
+            match_attr = "goodix_gr55xx_uart_0";
+            id = 0;                         /* APP_UART_ID_0 */
+            baudrate = 115200;
+            pin_tx_type = 0;                /* APP_IO_TYPE_NORMAL */
+            pin_tx_pin = 10;                /* APP_IO_PIN_10 */
+            pin_tx_mux = 2;                 /* APP_IO_MUX_2  */
+            pin_tx_pull = 1;                /* APP_IO_PULLUP */
+
+            pin_rx_type = 0;                /* APP_IO_TYPE_NORMAL */
+            pin_rx_pin = 11;                /* APP_IO_PIN_11 */
+            pin_rx_mux = 2;                 /* APP_IO_MUX_2 */
+            pin_rx_pull = 1;                /* APP_IO_PULLUP */
+
+            use_mode_type = 0;              /* APP_UART_TYPE_INTERRUPT */
+            use_mode_tx_dma_ch = 0;         /* DMA_Channel0 */
+            use_mode_rx_dma_ch = 1;         /* DMA_Channel1 */
+
+            rx_timeout_mode = 1;            /* UART_RECEIVER_TIMEOUT_ENABLE */
+        }
+        controller_uart1 :: uart_controller {
+            match_attr = "goodix_gr55xx_uart_1";
+            id = 1;                         /* APP_UART_ID_1 */
+            baudrate = 115200;
+            pin_tx_type = 0;                /* APP_IO_TYPE_NORMAL */
+            pin_tx_pin = 9;                 /* APP_IO_PIN_7 */
+            pin_tx_mux = 3;                 /* APP_IO_MUX_3 */
+            pin_tx_pull = 1;                /* APP_IO_PULLUP */
+
+            pin_rx_type = 0;                /* APP_IO_TYPE_NORMAL */
+            pin_rx_pin = 8;                 /* APP_IO_PIN_6 */
+            pin_rx_mux = 3;                 /* APP_IO_MUX_3 */
+            pin_rx_pull = 1;                /* APP_IO_PULLUP */
+
+            use_mode_type = 0;              /* APP_UART_TYPE_INTERRUPT */
+
+            rx_timeout_mode = 1;            /* UART_RECEIVER_TIMEOUT_ENABLE */
+        }
+    }
+}

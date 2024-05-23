@@ -1,0 +1,16 @@
+#include "device_info.hcs"
+#include "gpio_config.hcs"
+#include "i2c_config.hcs"
+#include "spi_config.hcs"
+#include "uart_config.hcs"
+#include "littlefs_config.hcs"
+#include "adc_config.hcs"
+#include "dac_config.hcs"
+#include "pwm_config.hcs"
+#include "rtc_config.hcs"
+#include "watchdog_config.hcs"
+
+root {
+    module = "gd,gd32f470_chip";
+}
+

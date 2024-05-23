@@ -1,0 +1,36 @@
+root {
+    platform {
+        template uart_controller {
+            match_attr = "";
+            id = 0;
+            baudrate = 115200;
+
+            pin_tx_type = 0;
+            pin_tx_pin = 0;
+            pin_tx_mux = 0;
+            pin_tx_pull = 0;
+
+            pin_rx_type = 0;
+            pin_rx_pin = 0;
+            pin_rx_mux = 0;
+            pin_rx_pull = 0;
+
+            use_mode_type = 0;
+            use_mode_tx_dma_ch = 0;
+            use_mode_rx_dma_ch = 0;
+
+            rx_timeout_mode = 1;
+        }
+        controller_uart0 :: uart_controller {
+            match_attr = "asr582x_uart_0";
+            port = 0;                       /* UART_ID_0 */
+ 
+            pin_tx_pin = 0;                /* IO_PIN_10 */
+            pin_tx_mux = 25;                 /* IO_MUX_2  */
+
+            pin_rx_pin = 1;                /* IO_PIN_11 */
+            pin_rx_mux = 25;                 /* IO_MUX_2 */
+            tx_rx = 3;                     /* TX_RX MODE */
+       }
+    }
+}

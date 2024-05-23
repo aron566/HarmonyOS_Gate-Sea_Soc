@@ -1,0 +1,10 @@
+{
+    "subsystem":"device_stm32l4_board",
+    "parts": {
+        "device_stm32l4_board": {
+            "module_list": [
+                "//device/board/csg/stm32l4_board:process_after_build"
+            ]
+        }
+    }
+}

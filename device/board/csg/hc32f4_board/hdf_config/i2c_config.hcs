@@ -1,0 +1,29 @@
+root {
+    platform {
+        i2c_config{
+            match_attr = "stm32l4xx_i2c_0";
+            template i2c_controller {
+                bus = 0;
+                irq = 0;
+            }
+            controller_0 :: i2c_controller {
+                bus = 0;
+                sclpin_group = 6;  // GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                sdapin_group = 6;  // GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                sclpin = 6;        // GPIO管脚0-15
+                sdapin = 7;        // GPIO管脚0-15
+                sclfunc = 49;      //按照gpio func配置
+                sdafunc = 48;      //按照gpio func配置
+            }
+            //controller_1 :: i2c_controller {
+            //    bus = 1;
+            //    sclpin_group = 4;
+            //    sdapin_group = 5;
+            //    sclpin = 7;
+            //    sdapin = 8;
+            //    sclfunc = 50;
+            //    sdafunc = 51;
+            //}
+        }
+    }
+}

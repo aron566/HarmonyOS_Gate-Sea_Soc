@@ -1,0 +1,220 @@
+root {
+    device_info {
+        match_attr = "hdf_manager";
+        template host {
+            hostName = "";
+            priority = 50;
+            template device {
+                template deviceNode {
+                    policy = 0;
+                    priority = 100;
+                    preload = 0;
+                    permission = 0664;
+                    moduleName = "";
+                    serviceName = "";
+                    deviceMatchAttr = "";
+                }
+            }
+        }
+        platform :: host {
+            hostName = "platform_host";
+            priority = 50;
+            device_gpio :: device {
+                device0 :: deviceNode {
+                    policy = 0;
+                    priority = 60;
+                    permission = 0644;
+                    moduleName = "HC_GPIO_MODULE_HDF";
+                    serviceName = "HDF_PLATFORM_GPIO";
+                    deviceMatchAttr = "gpio_config";
+                }
+            }
+           /* device_spi :: device {
+                device0 :: deviceNode {
+                    policy = 2;
+                    priority = 60;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_SPI";
+                    serviceName = "HDF_PLATFORM_SPI_0";
+                    deviceMatchAttr = "hc32f4a0_spi_0";
+                }
+                device1 :: deviceNode {
+                    policy = 2;
+                    priority = 60;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_QSPI";
+                    serviceName = "HDF_PLATFORM_SPI_1";
+                    deviceMatchAttr = "hc32f4a0_qspi";
+                }
+                device2 :: deviceNode {
+                    policy = 2;
+                    priority = 60;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_SPI";
+                    serviceName = "HDF_PLATFORM_SPI_2";
+                    deviceMatchAttr = "hc32f4a0_spi_2";
+                }
+            }
+            device_uart :: device {
+                device_uart1 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_1";
+                    deviceMatchAttr = "hc32f4a0_uart_1";
+                }
+                device_uart2 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_2";
+                    deviceMatchAttr = "hc32f4a0_uart_2";
+                }
+                device_uart3 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_3";
+                    deviceMatchAttr = "hc32f4a0_uart_3";
+                }
+                device_uart4 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_4";
+                    deviceMatchAttr = "hc32f4a0_uart_4";
+                }
+                device_uart5 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_5";
+                    deviceMatchAttr = "hc32f4a0_uart_5";
+                }
+                device_uart6 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_6";
+                    deviceMatchAttr = "hc32f4a0_uart_6";
+                }
+                device_uart7 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_7";
+                    deviceMatchAttr = "hc32f4a0_uart_7";
+                }
+                device_uart8 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_8";
+                    deviceMatchAttr = "hc32f4a0_uart_8";
+                }
+                device_uart9 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_9";
+                    deviceMatchAttr = "hc32f4a0_uart_9";
+                }
+                device_uart10 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_UART";
+                    serviceName = "HDF_PLATFORM_UART_10";
+                    deviceMatchAttr = "hc32f4a0_uart_10";
+                }
+            }
+            device_i2c :: device {
+                device0 :: deviceNode {
+                    policy = 2;
+                    priority = 50;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_I2C_MANAGER";
+                    serviceName = "HDF_PLATFORM_I2C_MANAGER";
+                    deviceMatchAttr = "hdf_platform_i2c_manager";
+                }
+                device1 :: deviceNode {
+                    policy = 0;
+                    priority = 55;
+                    permission = 0644;
+                    moduleName = "hc32f4xx_i2c_driver";
+                    serviceName = "hc32f4xx_i2c_driver";
+                    deviceMatchAttr = "stm32l4xx_i2c_0";
+                }
+            }
+            device_adc :: device {
+                device0 :: deviceNode {
+                    policy = 0;
+                    priority = 50;  // load adc_manager in prior to collect all the Adc node
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_ADC_MANAGER";
+                    serviceName = "HDF_PLATFORM_ADC_MANAGER";
+                }
+                // all the devices share the same deviceNode info
+                device1 :: deviceNode {
+                    policy = 0;    // unnecessary to publish service
+                    priority = 55;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_ADC_DRIVER";
+                    serviceName = "STM32L4xx_ADC_DRIVER";
+                    deviceMatchAttr = "hc32f4xx_adc_driver";
+                }
+            }
+            device_rtc :: device {
+                device0 :: deviceNode {
+                    policy = 1;
+                    priority = 30;
+                    permission = 0644;
+                    moduleName = "HC_HDF_PLATFORM_RTC";
+                    serviceName = "HDF_PLATFORM_RTC";
+                    deviceMatchAttr = "hc32f4a0_rtc";
+                }
+            }
+            device_watchdog :: device {
+                device0 :: deviceNode {
+                    policy = 2;
+                    priority = 40;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_WATCHDOG";
+                    serviceName = "HDF_PLATFORM_WATCHDOG_0";
+                    deviceMatchAttr = "hc32f4a0_watchdog_0";
+                }
+            }
+            device_pwm :: device {
+                device0 :: deviceNode {
+                    policy = 2;
+                    priority = 80;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_HRPWM";
+                    serviceName = "HDF_PLATFORM_PWM_0";
+                    deviceMatchAttr = "hc32_hrpwm_0";
+                }
+            } */
+        }
+        /* misc :: host {
+            hostName = "misc_host";
+            priority = 100;
+            fs :: device {
+                littlefs :: deviceNode {
+                    policy = 0;
+                    priority = 50;
+                    moduleName = "HC32_FS_LITTLEFS";
+                    deviceMatchAttr = "littlefs_config";
+                }
+            }
+        } */
+    }
+}

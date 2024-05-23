@@ -1,0 +1,110 @@
+# Copyright (c) 2022 Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+# All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/lite/config/component/lite_component.gni")
+
+declare_args() {
+    disasm_unstripped_version = false
+}
+
+template("binary") {
+    assert(defined(invoker.deps),
+           "Need sources in $target_name listing the idl files.")
+
+    build_ext_component(target_name) {
+        deps = invoker.deps
+
+        if (defined(invoker.source)) {
+            source = invoker.source
+        } else {
+            source = deps[0]
+        }
+
+        print("ohos_build_type=${ohos_build_type}")
+        print("target_name = ${target_name}")
+        print(source)
+        print(compile_prefix)
+        
+
+        elf = get_label_info(source, "name")
+        print("elf: ${elf} ")
+        print("target_out_dir: ${target_out_dir}")
+        print("root_out_dir: ${root_out_dir}")
+        print("name: ${name}")
+        out_dir = get_path_info(target_out_dir, "out_dir")
+        print("out_dir: ${out_dir}")
+        print("ohos_current_strip_command: ${ohos_current_strip_command}")
+
+        if (defined(invoker.output)) {
+            bin = invoker.output
+        } else {
+            bin = elf + ".bin"
+        }
+
+        print("bin: ${bin}")
+
+        exec_path = rebase_path(root_out_dir + "/bin")
+        print("root_out_dir: ${root_out_dir}")
+        print("exec_path: ${exec_path}")
+        
+        objcopy = "${compile_prefix}objcopy$toolchain_cmd_suffix"
+        objdump = "${compile_prefix}objdump$toolchain_cmd_suffix"
+
+        command = "$objcopy -O ihex ${elf} $elf.hex"
+        command += " && sh -c '$objcopy -O binary ${elf} ${bin}'"
+        command += " && sh -c '$objdump -t $elf | sort > $elf.sym.sorted'"
+        command += " && sh -c '$objdump -xdSC $elf > $elf.S'"
+        print("command: \"$command\"")
+    }
+}
+
+template("gd32f4xxx_firmware") {
+    executable("${target_name}_elf") {
+        forward_variables_from(invoker, "*")
+
+        explicit_libs_full = []
+        if (defined(explicit_libs)) {
+            foreach(lib, explicit_libs) {
+                explicit_libs_full += ["-l$lib"]
+            }
+        }
+
+        if (!defined(ldflags)) {
+            ldflags = []
+        }
+
+        ldflags += [
+            "-L" + rebase_path("$root_out_dir/libs"),
+        ]
+
+        ldflags += ["-Wl,--whole-archive"] + explicit_libs_full + ["-Wl,--no-whole-archive"]
+
+        configs += [
+            "//kernel/liteos_m:public",
+            "//kernel/liteos_m:los_config",
+        ]
+        
+        output_name = invoker.target_name
+    }
+
+    binary("${target_name}_bin") {
+        deps = [":${invoker.target_name}_elf"]
+        source = invoker.target_name
+    }
+    
+    group(target_name) {
+        deps = [":${invoker.target_name}_bin"]
+    }
+}

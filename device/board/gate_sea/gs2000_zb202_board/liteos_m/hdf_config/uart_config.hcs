@@ -1,0 +1,152 @@
+root {
+    platform {
+        template uart_config {
+            match_attr = "";
+            baudval = 115200;
+        }
+        uart0_config :: uart_config {
+            match_attr = "gd32f470_uart_0";
+            //uart config
+            num = 0;          //USART0
+            enable = 0;
+            rxPort = 0;      // UART_rx管脚组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+            rxPin = 0;
+            rx_AF = 0;
+            txPort = 0;
+            txPin = 0;
+            tx_AF = 0;
+            rx_DMA = 0;
+            rx_DmaCh = 0;
+            rx_DmaPerSel = 0;
+            tx_DMA = 0;
+            tx_DmaCh = 0;
+            tx_DmaPerSel = 0;
+        }
+        uart1_config :: uart_config {
+            match_attr = "gd32f470_uart_1";
+            //uart config
+            num = 1;          // USART1
+            enable = 1;
+            rxPort = 0;        // UART_rx管脚组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+            rxPin = 3;         // UART_rx管脚  0~15: GPIO_PIN_0 ~ GPIO_PIN_15
+            rx_AF = 7;         // GPIO 备用功能: 0~15: GPIO_AF_0 ~ GPIO_AF_15
+            rx_DMA = 0;        // DMA: 0:DMA0  1:DMA1
+            rx_DmaCh = 5;      // DMA通道选择: 0~7: DMA_CH0 ~ DMA_CH7
+            rx_DmaPerSel = 4;  // DMA外设选择  0~7: DMA_SUBPERI0 ~ DMA_SUBPERI7
+            txPort = 0;
+            txPin = 2;
+            tx_AF = 7;
+            tx_DMA = 0;
+            tx_DmaCh = 6;
+            tx_DmaPerSel = 4;
+        }
+        uart2_config :: uart_config {
+            match_attr = "gd32f470_uart_2";
+            //uart config
+            num = 2;          // USART2
+            enable = 1;
+            rxPort = 1;        // UART_rx管脚组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+            rxPin = 11;         // UART_rx管脚  0~15: GPIO_PIN_0 ~ GPIO_PIN_15
+            rx_AF = 7;         // GPIO 备用功能: 0~15: GPIO_AF_0 ~ GPIO_AF_15
+            rx_DMA = 0;        // DMA: 0:DMA0  1:DMA1
+            rx_DmaCh = 1;      // DMA通道选择: 0~7: DMA_CH0 ~ DMA_CH7
+            rx_DmaPerSel = 4;  // DMA外设选择  0~7: DMA_SUBPERI0 ~ DMA_SUBPERI7
+            txPort = 1;
+            txPin = 10;
+            tx_AF = 7;
+            tx_DMA = 0;
+            tx_DmaCh = 3;
+            tx_DmaPerSel = 4;
+        }
+        uart3_config :: uart_config {
+            match_attr = "gd32f470_uart_3";
+            //uart config
+            num = 3;          // USART2
+            enable = 1;
+            rxPort = 2;        // UART_rx管脚组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+            rxPin = 11;         // UART_rx管脚  0~15: GPIO_PIN_0 ~ GPIO_PIN_15
+            rx_AF = 8;         // GPIO 备用功能: 0~15: GPIO_AF_0 ~ GPIO_AF_15
+            rx_DMA = 0;        // DMA: 0:DMA0  1:DMA1
+            rx_DmaCh = 2;      // DMA通道选择: 0~7: DMA_CH0 ~ DMA_CH7
+            rx_DmaPerSel = 4;  // DMA外设选择  0~7: DMA_SUBPERI0 ~ DMA_SUBPERI7
+            txPort = 2;
+            txPin = 10;
+            tx_AF = 8;
+            tx_DMA = 0;
+            tx_DmaCh = 4;
+            tx_DmaPerSel = 4;
+        }
+        uart4_config :: uart_config {
+            match_attr = "gd32f470_uart_4";
+            //uart config
+            num = 4;          // USART4
+            enable = 1;
+            rxPort = 3;        // UART_rx管脚组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+            rxPin = 2;         // UART_rx管脚  0~15: GPIO_PIN_0 ~ GPIO_PIN_15
+            rx_AF = 8;         // GPIO 备用功能: 0~15: GPIO_AF_0 ~ GPIO_AF_15
+            rx_DMA = 0;        // DMA: 0:DMA0  1:DMA1
+            rx_DmaCh = 0;      // DMA通道选择: 0~7: DMA_CH0 ~ DMA_CH7
+            rx_DmaPerSel = 4;  // DMA外设选择  0~7: DMA_SUBPERI0 ~ DMA_SUBPERI7
+            txPort = 2;
+            txPin = 12;
+            tx_AF = 8;
+            tx_DMA = 0;
+            tx_DmaCh = 7;
+            tx_DmaPerSel = 4;
+        }
+        uart5_config :: uart_config {
+            match_attr = "gd32f470_uart_5";
+            //uart config
+            num = 5;          // USART5
+            enable = 1;
+            rxPort = 6;        // UART_rx管脚组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+            rxPin = 9;         // UART_rx管脚  0~15: GPIO_PIN_0 ~ GPIO_PIN_15
+            rx_AF = 8;         // GPIO 备用功能: 0~15: GPIO_AF_0 ~ GPIO_AF_15
+            rx_DMA = 1;        // DMA: 0:DMA0  1:DMA1
+            rx_DmaCh = 1;      // DMA通道选择: 0~7: DMA_CH0 ~ DMA_CH7
+            rx_DmaPerSel = 5;  // DMA外设选择  0~7: DMA_SUBPERI0 ~ DMA_SUBPERI7
+            txPort = 6;
+            txPin = 14;
+            tx_AF = 8;
+            tx_DMA = 1;
+            tx_DmaCh = 7;
+            tx_DmaPerSel = 5;
+        }
+        uart6_config :: uart_config {
+            match_attr = "gd32f470_uart_6";
+            //uart config
+            num = 6;          // UART6
+            enable = 1;
+            rxPort = 4;        // UART_rx管脚组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+            rxPin = 7;         // UART_rx管脚  0~15: GPIO_PIN_0 ~ GPIO_PIN_15
+            rx_AF = 8;         // GPIO 备用功能: 0~15: GPIO_AF_0 ~ GPIO_AF_15
+            rx_DMA = 0;        // DMA: 0:DMA0  1:DMA1
+            rx_DmaCh = 3;      // DMA通道选择: 0~7: DMA_CH0 ~ DMA_CH7
+            rx_DmaPerSel = 5;  // DMA外设选择  0~7: DMA_SUBPERI0 ~ DMA_SUBPERI7
+            txPort = 4;
+            txPin = 8;
+            tx_AF = 8;
+            tx_DMA = 0;
+            tx_DmaCh = 1;
+            tx_DmaPerSel = 5;
+        }
+        uart7_config :: uart_config {
+            match_attr = "gd32f470_uart_7";
+            //uart config
+            num = 7;          // UART7
+            enable = 0;
+            rxPort = 4;        // UART_rx管脚组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+            rxPin = 0;         // UART_rx管脚  0~15: GPIO_PIN_0 ~ GPIO_PIN_15
+            rx_AF = 8;         // GPIO 备用功能: 0~15: GPIO_AF_0 ~ GPIO_AF_15
+            rx_DMA = 0;        // DMA: 0:DMA0  1:DMA1
+            rx_DmaCh = 6;      // DMA通道选择: 0~7: DMA_CH0 ~ DMA_CH7
+            rx_DmaPerSel = 5;  // DMA外设选择  0~7: DMA_SUBPERI0 ~ DMA_SUBPERI7
+            txPort = 4;
+            txPin = 1;
+            tx_AF = 8;
+            tx_DMA = 0;
+            tx_DmaCh = 0;
+            tx_DmaPerSel = 5;
+        }
+    }
+}

@@ -1,0 +1,17 @@
+root {
+    platform {
+        gpio_config {
+            match_attr = "gpio_config";
+            PinNum = 6;
+            Pin =            [ 0, 1,  2,  3,  4,  5,  6, 7]; // GPIO序号
+            RealPin =        [ 4, 5, 14, 13,  0,  9,  2, 7]; // GPIO管脚0-15
+            Group =          [ 3, 3,  1,  2,  0,  6,  2, 2]; // GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+            PinState =       [ 0, 0,  0,  0,  0,  0,  0, 0]; // GPIO状态 0: 置低   1: 置高
+            PinDir =         [ 1, 1,  0,  0,  0,  1,  1, 1]; // GPIO方向 0: 输入   1: 输出
+            PinOutputType =  [ 0, 0,  0,  0,  0,  0,  0, 0]; // 输出模式 0 :推挽输出 1: 开漏输出
+            PullUp =         [ 0, 0,  0,  0,  0,  0,  0, 0]; // 上拉许可 0: 不上拉 1:上拉 2:下拉
+            PrePr  =         [ 0, 0,  0,  2,  2,  0,  0, 0]; // GPIO抢占优先级
+            SubPr  =         [ 0, 0,  0,  0,  1,  0,  0, 0]; // GPIO子优先级
+        }
+    }
+}

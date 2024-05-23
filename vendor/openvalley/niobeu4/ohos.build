@@ -1,0 +1,10 @@
+{
+  "subsystem": "product_niobeu4",
+  "parts": {
+    "product_niobeu4": {
+      "module_list": [
+        "//base/update/sys_installer_lite/frameworks:sys_installer_lite"
+      ]
+    }
+  }
+}

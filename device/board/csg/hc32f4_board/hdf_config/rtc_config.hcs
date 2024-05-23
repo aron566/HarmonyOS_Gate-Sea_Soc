@@ -1,0 +1,16 @@
+root {
+    platform {
+        rtc_config {
+            rtc0_config {
+                match_attr = "hc32f4a0_rtc";
+                RtcId = 1;
+                HourFormat = 0;   //RTC小时格式   0:12 hour time 1:24 hour time
+                AlarmWeekday = 1; //RTC报警星期 0:SUNDAY 1:MONDAY 2:TUESDAY 3:WEDNSDAY 4:THURSDAY 5:FRIDAY 6:SATURDAY
+                AlarmAmPm = 1;    //RTC报警上午/下午时间 0:24-hour formt 1:AM in 12-hour 2:PM in 12-hour 
+                Mouth = 0;        //RTC月份 0:JANUARY 1:FEBRUARY 2:MARCH 3:APRIL 4:MAY 5:JUNE 6:JULY 7:AUGUST 8:SEPTEMBER 9:OCTOBER 10:NOVEMBER 11:DECEMBER
+                Weekday = 0;      //RTC星期 0:SUNDAY 1:MONDAY 2:TUESDAY 3:WEDNSDAY 4:THURSDAY 5:FRIDAY 6:SATURDAY
+                AmPm = 2;         //RTC上午/下午 0:RTC_HOUR_24H 1:RTC_HOUR_12H_AM 2:RTC_HOUR_12H_PM
+            }
+        }
+    }
+}

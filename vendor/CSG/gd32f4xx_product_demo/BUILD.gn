@@ -1,0 +1,25 @@
+# Copyright (C) 2020 Hisilicon (Shanghai) Technologies Co., Ltd. All rights reserved.
+
+import("//device/soc/gigadevice/gd32f4xx/util/util.gni")
+gd32f4xxx_firmware("gd32f4xx_product_demo") {
+  explicit_libs = [
+    "bootstrap",
+    "broadcast",
+    "hctest",
+    #"huks_test_common",
+    "module_ActsParameterTest",
+    "module_ActsBootstrapTest",
+    #"module_ActsDfxFuncTest",
+    #"module_ActsHieventLiteTest",
+    "module_ActsSamgrTest",
+    #"module_ActsUpdaterFuncTest",
+    #"module_ActsHuksHalFunctionTest",
+    #"module_ActsUtilsFileTest",
+  ]
+
+  deps = [ "//build/lite:ohos" ]
+
+  deps += [
+     "//build/lite/config/component/cJSON:cjson_static",
+  ]
+}

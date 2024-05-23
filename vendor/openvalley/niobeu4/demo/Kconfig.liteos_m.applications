@@ -1,0 +1,49 @@
+# Copyright (c) 2022 Hunan OpenValley Digital Industry Development Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+config USE_OPENVALLEY_APPLICATION
+    bool "use openvalley niobeu4 application"
+    default n
+    help
+        This is a switch for use openvalley niobeu4 application.
+        If you want to write your application code, please close it.
+
+choice
+        prompt "niobeu4 application choose"
+        depends on USE_OPENVALLEY_APPLICATION
+        default NIOBEU4_APPLICATION_001
+        help
+            This is a choose for application name
+        orsource "*/.application_config"
+endchoice
+
+config NIOBEU4_APPLICATION_NAME
+    string
+    depends on USE_OPENVALLEY_APPLICATION
+    default "001_quick_start" if NIOBEU4_APPLICATION_001
+    default "002_system_los_thread" if NIOBEU4_APPLICATION_002
+    default "003_system_los_timer" if NIOBEU4_APPLICATION_003
+    default "004_system_los_event" if NIOBEU4_APPLICATION_004
+    default "005_system_los_mutex" if NIOBEU4_APPLICATION_005
+    default "006_system_los_semp" if NIOBEU4_APPLICATION_006
+    default "007_system_los_message" if NIOBEU4_APPLICATION_007
+    default "101_hdf_adc" if NIOBEU4_APPLICATION_101
+    default "102_hdf_gpio" if NIOBEU4_APPLICATION_102
+    default "103_hdf_uart" if NIOBEU4_APPLICATION_103
+    default "104_hdf_watchdog" if NIOBEU4_APPLICATION_104
+    default "105_hdf_pwm" if NIOBEU4_APPLICATION_105
+    default "106_hdf_i2c" if NIOBEU4_APPLICATION_106
+    default "107_hdf_spi" if NIOBEU4_APPLICATION_107
+    default "201_bluetooth" if NIOBEU4_APPLICATION_201
+    default "202_wifi" if NIOBEU4_APPLICATION_202
