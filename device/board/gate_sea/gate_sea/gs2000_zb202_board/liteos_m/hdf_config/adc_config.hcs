@@ -1,0 +1,63 @@
+root {
+    platform {
+        adc_config {
+            match_attr = "gd32f4xx_adc_driver";
+            template adc_device {
+            }
+            device_0 :: adc_device {
+                //ADC配置
+                device_num = 0;  //ADC device number　
+                adc_type = 1;    //ADC单元:0-ADC1 1-ADC2 2-ADC3
+                rcutimer = 0;    //rcu timer clock : RCU_TIMER1 ~ RCU_TIMER13, RCU_TIMER1:rcutimer = 0, RCU_TIMER13:rcutimer = 12
+                rcudma = 1;      //rcu dma : 0:RCU_DMA0 1:RCU_DMA1
+                adc_adcck = 3;   //0:PCLK2 div2 1:PCLK2 div4 2:PCLK2 div6 3:PCLK2 div8 4:HCLK div5 5:HCLK div5 6:HCLK div10 7:HCLK div20
+                channel_count = 4;  //所用ADC通道个数
+                adc_channel = [1, 2, 3, 4];  //ADC通道选择:0~19, 0-ADC_CH0, 1-ADC_CH1, 19-ADC_CH19
+                group = [0, 0, 0, 0]; //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                pin = [1, 2, 3, 4];   //GPIO管脚0-15
+                adc_sample_time = 1;  //ADC channel sample time, 0-7, 0:3 sampling cycles, 1:15 sampling cycles, 2:28 sampling cycles, 3:56 sampling cycles,
+                                      //4:84 sampling cycles, 5:112 sampling cycles, 6:144 sampling cycles, 7:480 sampling cycles
+                adc_data_align = 0;   //ADC data alignment, 0: LSB alignment, 0: MSB alignment
+                adc_ch_sequence = 0;  //ADC channel sequence definitions, 0:routine sequence, 1:inserted sequence, 2:both routine and inserted, 3: disable routine and inserted
+                adc_ext_trigger = 0;  //ADC external trigger select for routine channel, 0~6, 0:CTL1_ETSRC(0), 6:CTL1_ETSRC(6)
+                adc_ext_trmode = 0;   //external trigger mode, 0:external trigger disable, 1:rising edge, 2:falling edge, 3:rising and falling
+                //DMA配置
+                dma_type = 1;    //DMA通道： 0-DMA1 1-DMA2
+                dma_channel = 2; //DMA通道：0-DMA_CH0 1-DMA_CH1 7-DMA_CH7
+                dma_ch_priority = 2;  //DMA channel priority level, 0:low priority, 1:medium priority, 2:high priority, 3:ultra high priority
+                dma_increas_mode = 1; //DMA peripheral increasing mode, 0:increasing address mode, 1:fixed address mode, 2:increasing fixed
+                mem_increas_mode = 0; //memory increasing mode, 0:increasing address mode, 1:fixed address mode
+                dma_trans_width = 1;  //DMA transfer data width, 0:8-bit, 1:16-bit, 2:32-bit
+                dma_trans_mode = 0;   //channel transfer mode, 0:read from peripheral and write to memory, 1:read from memory and write to peripheral, 2:read from memory and write to memory
+                dma_subperi = 1;      //DMA peripheral select, 0~7, 参考DMA外设请求
+            }
+            device_1 :: adc_device {
+                //ADC配置
+                device_num = 1;  //ADC device number　
+                adc_type = 0;    //ADC单元:0-ADC1 1-ADC2 2-ADC3
+                rcutimer = 0;    //rcu timer clock : RCU_TIMER1 ~ RCU_TIMER13, RCU_TIMER1:rcutimer = 0, RCU_TIMER13:rcutimer = 12
+                rcudma = 1;      //rcu dma : 0:RCU_DMA0 1:RCU_DMA1
+                adc_adcck = 3;   //0:PCLK2 div2 1:PCLK2 div4 2:PCLK2 div6 3:PCLK2 div8 4:HCLK div5 5:HCLK div5 6:HCLK div10 7:HCLK div20
+                channel_count = 5;  //所用ADC通道个数
+                adc_channel = [11, 12, 13, 14, 15];  //ADC通道选择:0~19, 0-ADC_CH0, 1-ADC_CH1, 19-ADC_CH19
+                group = [2, 2, 2, 2, 2];  //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                pin = [1, 2, 3, 4, 5];    //GPIO管脚0-15
+                adc_sample_time = 1;  //ADC channel sample time, 0-7, 0:3 sampling cycles, 1:15 sampling cycles, 2:28 sampling cycles, 3:56 sampling cycles, 
+                                      //4:84 sampling cycles, 5:112 sampling cycles, 6:144 sampling cycles, 7:480 sampling cycles
+                adc_data_align = 0;   //ADC data alignment, 0: LSB alignment, 0: MSB alignment
+                adc_ch_sequence = 0;  //ADC channel sequence definitions, 0:routine sequence, 1:inserted sequence, 2:both routine and inserted, 3: disable routine and inserted
+                adc_ext_trigger = 0;  //ADC external trigger select for routine channel, 0~6, 0:CTL1_ETSRC(0), 6:CTL1_ETSRC(6)
+                adc_ext_trmode = 0;   //external trigger mode, 0:external trigger disable, 1:rising edge, 2:falling edge, 3:rising and falling
+                //DMA配置
+                dma_type = 1;    //DMA通道： 0-DMA1 1-DMA2
+                dma_channel = 0; //DMA通道：0-DMA_CH0 1-DMA_CH1 7-DMA_CH7
+                dma_ch_priority = 2;  //DMA channel priority level, 0:low priority, 1:medium priority, 2:high priority, 3:ultra high priority
+                dma_increas_mode = 1; //DMA peripheral increasing mode, 0:increasing address mode, 1:fixed address mode, 2:increasing fixed
+                mem_increas_mode = 0; //memory increasing mode, 0:increasing address mode, 1:fixed address mode
+                dma_trans_width = 1;  //DMA transfer data width, 0:8-bit, 1:16-bit, 2:32-bit
+                dma_trans_mode = 0;   //channel transfer mode, 0:read from peripheral and write to memory, 1:read from memory and write to peripheral, 2:read from memory and write to memory
+                dma_subperi = 0;      //DMA peripheral select, 0~7, 参考DMA外设请求
+            }
+        }
+    }
+}
