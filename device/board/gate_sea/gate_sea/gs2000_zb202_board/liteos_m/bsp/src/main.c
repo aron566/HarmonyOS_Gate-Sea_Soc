@@ -1,4 +1,4 @@
-#if 0
+#if 1
 /**
  *  @file main.c
  *  @brief None.
@@ -22,19 +22,12 @@
 #include "gsmcu_iwdg.h"
 #include "los_task.h"
 #include "gsmcu_hal.h"
+#include "uart.h"
 /** Use C compiler -----------------------------------------------------------*/
 #ifdef __cplusplus /**< use C compiler */
 extern "C" {
 #endif
 /** Private macros -----------------------------------------------------------*/
-
-#define OHOS_APP_RUN(func)                                                                        \
-  void ohos_app_main(void)                                                                        \
-  {                                                                                               \
-    LOS_TaskDelay(100);                                                                           \
-    printf("\n\033[1;32m<--------------- OHOS Application Start Here --------------->\033[0m\n"); \
-    func();                                                                                       \
-  }
 
 /** Private typedef ----------------------------------------------------------*/
 
@@ -44,6 +37,7 @@ extern "C" {
 
 /** Private function prototypes ----------------------------------------------*/
 extern void Error_Handler(void);
+extern void Hilog_Init(void);
 /** Private user code --------------------------------------------------------*/
 
 /** Private application code -------------------------------------------------*/
@@ -100,6 +94,9 @@ void TaskSample(void)
   }
 }
 
+extern void GS_Gpio_Test(void);
+extern void StartHdfSpiLittlefsTest(void);
+
 /** Public application code --------------------------------------------------*/
 /*******************************************************************************
  *
@@ -119,8 +116,18 @@ int main(void)
   WDG_Disable();
 #endif
 
-  printf("%s user main!\n", __TIME__);
+  /* 初始化GPIO */
+  SCU_DisableALLGPIOInput();
 
+  /* 初始化串口 */
+  UART_Init();
+
+  printf("entry user main!\r\n");
+
+  /* DFX子系统日志输出接口初始化 */
+  Hilog_Init();
+
+  /* 内核初始化 */
   uint32_t ret = LOS_OK;
   ret = LOS_KernelInit();
   if (LOS_OK != ret)
@@ -128,20 +135,28 @@ int main(void)
     Error_Handler();
   }
 
+  /* 鸿蒙系统初始化 */
+  OHOS_SystemInit();
+
 #if LOSCFG_DRIVERS_HDF
   DeviceManagerStart();
 #endif
 
-  /* 启动恢复子系统初始化 */
-  OHOS_SystemInit();
+  /* 初始化fs */
+  FsInit();
+
+  /* 执行gpio测试 */
+  // GS_Gpio_Test();
+  /* 执行littlefs测试 */
+  // StartHdfSpiLittlefsTest();
 
   /* 创建任务 */
-  TaskSample();
+  // TaskSample();
 
   /* 使用OS中断处理 */
   NVIC_SetVector(SysTick_IRQn, (uint32_t)OsTickHandler);
 
-  // FsInit();
+  /* 启动内核 */
   LOS_Start();
   while (1)
   {
@@ -154,7 +169,7 @@ int main(void)
 #endif
 /******************************** End of file *********************************/
 #endif
-#if 1
+#if 0
 /**
  *  @file main.c
  *  @brief None.
@@ -288,19 +303,20 @@ int main(void)
 
   printf("%s user main!\n", __TIME__);
 
-  int ret = LOS_OK;
+  /* 内核初始化 */
+  uint32_t ret = LOS_OK;
   ret = LOS_KernelInit();
   if (LOS_OK != ret)
   {
     Error_Handler();
   }
 
+  /* 鸿蒙系统初始化 */
+  OHOS_SystemInit();
+
 #if LOSCFG_DRIVERS_HDF
   DeviceManagerStart();
 #endif
-
-  /* 启动恢复子系统初始化 */
-  OHOS_SystemInit();
 
   /* 创建任务 */
   TaskSample();
@@ -447,18 +463,19 @@ int main(void)
   printf("%s user main!\n", __TIME__);
 
   /* 内核初始化 */
-  osStatus_t ret = osKernelInitialize();
-  if (osOK != ret)
+  uint32_t ret = LOS_OK;
+  ret = LOS_KernelInit();
+  if (LOS_OK != ret)
   {
     Error_Handler();
   }
 
+  /* 鸿蒙系统初始化 */
+  OHOS_SystemInit();
+
 #if LOSCFG_DRIVERS_HDF
   DeviceManagerStart();
 #endif
-
-  /* 启动恢复子系统初始化 */
-  OHOS_SystemInit();
 
   /* 创建任务 */
   TaskSample();

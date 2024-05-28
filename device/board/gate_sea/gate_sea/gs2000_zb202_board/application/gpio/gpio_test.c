@@ -4,104 +4,165 @@
 #include "cmsis_os2.h"
 #include "hdf_log.h"
 #include "gpio_if.h"
-#include "main.h"
+#include "los_task.h"
 
-#define HDF_LOG_TAG         gpio_test
-
-#define HDF_GPIO_STACK_SIZE 0x1000
-#define HDF_GPIO_TASK_NAME "hdf_gpio_test_task"
-#define HDF_GPIO_TASK_PRIORITY 25
+#define HDF_GPIO_STACK_SIZE    0x1000
+#define HDF_GPIO_TASK_NAME     "hdf_gpio_test_task"
+#define HDF_GPIO_TASK_PRIORITY 20
 
 static int32_t TestCaseGpioIrqHandler1(uint16_t gpio, void *data)
 {
-    HDF_LOGE("%s: irq triggered! on gpio:%u, data=%p", __func__, gpio, data);
-    uint16_t val = 0;
-    GpioRead(0, &val);
-    if (val) {
-        GpioWrite(2, 1);
-        GpioWrite(1, 1);
-        GpioWrite(0, 0); // red
-    } else {
-        GpioWrite(2, 1);
-        GpioWrite(1, 1);
-        GpioWrite(0, 1);
-    }
-    return 0;
+  HDF_LOGI("%s: Enter! [line = %d]\r\n", __func__, __LINE__);
 }
 
 static int32_t TestCaseGpioIrqHandler2(uint16_t gpio, void *data)
 {
-    HDF_LOGE("%s: irq triggered! on gpio:%u, data=%p", __func__, gpio, data);
-    uint16_t val = 0;
-    GpioRead(1, &val);
-    if (val) {
-        GpioWrite(2, 1);
-        GpioWrite(1, 0); // green
-        GpioWrite(0, 1);
-    } else {
-        GpioWrite(2, 1);
-        GpioWrite(1, 1);
-        GpioWrite(0, 1);
-    }
-    return 0;
+  HDF_LOGI("%s: Enter! [line = %d]\r\n", __func__, __LINE__);
 }
 
-static void HdfGpioTestEntry(void* arg)
+static void *HdfGpioTestEntry(void *arg)
 {
-    (void)arg;
-    int32_t ret;
-    uint16_t mode;
-    uint16_t gpio_key0 = 3;
-    uint16_t gpio_key1 = 4;
+  (void)arg;
+  int32_t  ret;
+  uint16_t mode;
+  uint16_t val;
 
-    GpioWrite(0, 1); // close
-    GpioWrite(1, 1); // close
-    GpioWrite(2, 0); // open blue
+  HDF_LOGE("%s: [line = %d]\n", __func__, __LINE__);
 
-    mode = OSAL_IRQF_TRIGGER_FALLING;
-    HDF_LOGI("%s: mode:%0x\n", __func__, mode);
+  GpioSetDir(0, 1);   // dir: output
+  GpioWrite(0, 1);
+  GpioSetDir(1, 1);   // dir: output
+  GpioWrite(1, 1);
 
-    ret = GpioSetIrq(gpio_key0, mode, TestCaseGpioIrqHandler1, NULL);
-    if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: set irq fail! ret:%d\n", __func__, ret);
-        return ;
-    }
+  GpioGetDir(0, &val);
+  HDF_LOGI("%s: [line = %d] [dir = %d]\n", __func__, __LINE__, val);
 
-    ret = GpioSetIrq(gpio_key1, mode, TestCaseGpioIrqHandler2, NULL);
-    if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: set irq fail! ret:%d\n", __func__, ret);
-        return ;
-    }
+  GpioRead(0, &val);   // read output value
+  HDF_LOGI("%s: [line = %d] [val = %d]\n", __func__, __LINE__, val);
 
-    ret = GpioEnableIrq(gpio_key0);
-    if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: enable irq fail! ret:%d\n", __func__, ret);
-        return ;
-    }
+  GpioSetDir(2, 0);    // dir: input
+  GpioRead(2, &val);   // read input value
+  HDF_LOGI("%s: [line = %d] [val = %d]\n", __func__, __LINE__, val);
 
-    ret = GpioEnableIrq(gpio_key1);
-    if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: enable irq fail! ret:%d\n", __func__, ret);
-        return ;
-    }
+  mode = OSAL_IRQF_TRIGGER_RISING;
+  HDF_LOGI("%s: mode:%0x\n", __func__, mode);
 
+  ret = GpioSetIrq(3, mode, TestCaseGpioIrqHandler1, NULL);
+  if (ret != HDF_SUCCESS)
+  {
+    HDF_LOGE("%s: set irq fail! ret:%d\n", __func__, ret);
+    return NULL;
+  }
+  ret = GpioEnableIrq(3);
+  if (ret != HDF_SUCCESS)
+  {
+    HDF_LOGE("%s: enable irq fail! ret:%d\n", __func__, ret);
+    return NULL;
+  }
+
+  ret = GpioSetIrq(4, mode, TestCaseGpioIrqHandler2, NULL);
+  if (ret != HDF_SUCCESS)
+  {
+    HDF_LOGE("%s: set irq fail! ret:%d\n", __func__, ret);
+    return NULL;
+  }
+  ret = GpioEnableIrq(4);
+  if (ret != HDF_SUCCESS)
+  {
+    HDF_LOGE("%s: enable irq fail! ret:%d\n", __func__, ret);
+    return NULL;
+  }
+
+  ret = GpioDisableIrq(3);
+  if (ret != HDF_SUCCESS)
+  {
+    HDF_LOGE("%s: disable irq fail! ret:%d\n", __func__, ret);
+    return NULL;
+  }
+
+  ret = GpioDisableIrq(4);
+  if (ret != HDF_SUCCESS)
+  {
+    HDF_LOGE("%s: disable irq fail! ret:%d\n", __func__, ret);
+    return NULL;
+  }
+
+  ret = GpioEnableIrq(3);
+  if (ret != HDF_SUCCESS)
+  {
+    HDF_LOGE("%s: enable irq fail! ret:%d\n", __func__, ret);
+    return NULL;
+  }
+
+  ret = GpioEnableIrq(4);
+  if (ret != HDF_SUCCESS)
+  {
+    HDF_LOGE("%s: enable irq fail! ret:%d\n", __func__, ret);
+    return NULL;
+  }
+
+  while (1)
+  {
+    (VOID) LOS_TaskDelay(400);
+  }
 }
 
 void StartHdfGpioTest(void)
 {
-    osThreadAttr_t attr;
+  osThreadAttr_t attr;
 
-    attr.name = HDF_GPIO_TASK_NAME;
-    attr.attr_bits = 0U;
-    attr.cb_mem = NULL;
-    attr.cb_size = 0U;
-    attr.stack_mem = NULL;
-    attr.stack_size = HDF_GPIO_STACK_SIZE;
-    attr.priority = HDF_GPIO_TASK_PRIORITY;
+  attr.name       = HDF_GPIO_TASK_NAME;
+  attr.attr_bits  = 0U;
+  attr.cb_mem     = NULL;
+  attr.cb_size    = 0U;
+  attr.stack_mem  = NULL;
+  attr.stack_size = HDF_GPIO_STACK_SIZE;
+  attr.priority   = HDF_GPIO_TASK_PRIORITY;
 
-    if (osThreadNew((osThreadFunc_t)HdfGpioTestEntry, NULL, &attr) == NULL) {
-        printf("Failed to create thread1!\n");
-    }
+  if (osThreadNew((osThreadFunc_t)HdfGpioTestEntry, NULL, &attr) == NULL)
+  {
+    HDF_LOGE("Failed to create thread1!\n");
+  }
 }
 
-OHOS_APP_RUN(StartHdfGpioTest);
+static void *GS_HdfGpioTestEntry(void *arg)
+{
+  (void)arg;
+  HDF_LOGE("FUNC %s: line %d ENTRY\n", __func__, __LINE__);
+
+  /* 设置端口0作为输出 */
+  GpioSetDir(0, GPIO_DIR_OUT);
+
+  /* 设置端口1作为输出 */
+  GpioSetDir(1, GPIO_DIR_OUT);
+
+  while (1)
+  {
+    GpioWrite(0, 0);
+    GpioWrite(1, 1);
+    (VOID) LOS_TaskDelay(1000);
+    printf("Test Led running...\r\n");
+    GpioWrite(0, 1);
+    GpioWrite(1, 0);
+    (VOID) LOS_TaskDelay(1000);
+    printf("Test Led running...\r\n");
+  }
+}
+
+void GS_Gpio_Test(void)
+{
+  osThreadAttr_t attr;
+
+  attr.name       = HDF_GPIO_TASK_NAME;
+  attr.attr_bits  = 0U;
+  attr.cb_mem     = NULL;
+  attr.cb_size    = 0U;
+  attr.stack_mem  = NULL;
+  attr.stack_size = LOSCFG_BASE_CORE_TSK_MIN_STACK_SIZE;
+  attr.priority   = HDF_GPIO_TASK_PRIORITY;
+
+  if (osThreadNew((osThreadFunc_t)GS_HdfGpioTestEntry, NULL, &attr) == NULL)
+  {
+    HDF_LOGE("Failed to create thread1!\n");
+  }
+}

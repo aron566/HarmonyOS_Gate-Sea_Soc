@@ -40,9 +40,9 @@ void GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_InitStruct)
     curpass         = GPIOx->PINBYPASS;
     /*---------------------------- GPIO CRL Configuration ------------------------*/
     /* Configure port pins */
-    setdir      = (((uint32_t)GPIO_InitStruct->GPIO_Mode) >> 2) & 0x01;
-    setpullen   = (((uint32_t)GPIO_InitStruct->GPIO_Mode) >> 1) & 0x01;
-    setpulltype = (((uint32_t)GPIO_InitStruct->GPIO_Mode) >> 0) & 0x01;
+    setdir      = (((uint32_t)GPIO_InitStruct->GPIO_Mode) >> 2) & 0x01;/* 0：input */
+    setpullen   = (((uint32_t)GPIO_InitStruct->GPIO_Mode) >> 1) & 0x01;/* 1:enable */
+    setpulltype = (((uint32_t)GPIO_InitStruct->GPIO_Mode) >> 0) & 0x01;/* 0:pull down 1:pull up */
     for (pinpos = 0x00; pinpos < 32; pinpos++)
     {
       pos = ((uint32_t)0x01) << pinpos;

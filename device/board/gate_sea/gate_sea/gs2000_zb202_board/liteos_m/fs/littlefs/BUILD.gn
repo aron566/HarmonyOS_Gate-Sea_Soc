@@ -22,7 +22,7 @@ kernel_module(module_name) {
       "src/fs_init_sdk.c",
       #"src/w25qxx.c",
       #"src/qspi.c",
-      #"src/littlefs.c",
+      "src/littlefs_port.c",
     ]
     #if (defined(LOSCFG_MTHS_USE_HDF) &&
     #    defined(LOSCFG_DRIVERS_HDF_CONFIG_MACRO)) {

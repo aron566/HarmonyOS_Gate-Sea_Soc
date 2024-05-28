@@ -55,8 +55,8 @@ ENTRY(Reset_Handler)
 /* Highest address of the user mode stack */
 /*_estack = ORIGIN(RAM) + LENGTH(RAM);    /* end of RAM */
 /* Generate a link error if heap and stack don't fit into RAM */
-/*_Min_Heap_Size = 0x1000;      /* required amount of heap  */
-_Min_Stack_Size = 0x1000; /* required amount of stack */
+_Min_Heap_Size = 0x100;      /* required amount of heap  */
+_Min_Stack_Size = 0x2000; /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
@@ -64,8 +64,8 @@ MEMORY
   FLASH (rx)        : ORIGIN = 0x10000000, LENGTH = 0x200 /* it vector in RAM */
   /*RAM_CODE (xrw)    : ORIGIN = 0x10000200, LENGTH = 0x2FE00*/ /* for code & const data range:0x10000200 - 0x1002FFFF */
   /*RAM (xrw)         : ORIGIN = 0x10030000, LENGTH = 576K*/ /* for data & zero data range:0x10030000 - 0x100BFFFF */
-  RAM_CODE (rx)     : ORIGIN = 0x10000200, LENGTH = 0x48E00
-  RAM (xrw)         : ORIGIN = 0x10049000, LENGTH = 476K
+  RAM_CODE (rx)     : ORIGIN = 0x10000200, LENGTH = 0x48E00 + 76K + 110K + 99K
+  RAM (xrw)         : ORIGIN = 0x10049000 + 76K + 110K + 99K, LENGTH = 476K - 76K - 110K - 99K
 }
 
 /* Define output sections */
@@ -189,6 +189,7 @@ SECTIONS
     KEEP (*(SORT(.fini_array.*)))
     KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
+    __RAM_CODE_END = .;
   } >RAM_CODE
 
   /* used by the startup to initialize data */
@@ -228,7 +229,7 @@ SECTIONS
     . = ALIGN(8);
     PROVIDE ( end = . );
     PROVIDE ( _end = . );
-    /*. = . + _Min_Heap_Size;*/
+    . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     PROVIDE( _estack = . );
     . = ALIGN(8);
@@ -238,6 +239,12 @@ SECTIONS
 
   __los_heap_addr_start__ = .;
   __los_heap_addr_end__ = ORIGIN(RAM) + LENGTH(RAM);
+
+  /* total size */
+  __RAM_CODE_USED = ORIGIN(RAM_CODE) + LENGTH(RAM_CODE) -  __RAM_CODE_END;
+  __RAM_RW_USED = ORIGIN(RAM) + LENGTH(RAM) -  _end;
+  __RAM_STACK_USED = _Min_Stack_Size;
+  __LOS_HEAP_USED = __los_heap_addr_end__ - __los_heap_addr_start__;
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {

@@ -61,7 +61,7 @@ extern "C" {
 /* =============================================================================
                                        Task module configuration
 ============================================================================= */
-#define LOSCFG_BASE_CORE_TSK_LIMIT                          15
+#define LOSCFG_BASE_CORE_TSK_LIMIT                          20
 #define LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE                (0x400U)
 #define LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE             (0x400U)
 #define LOSCFG_BASE_CORE_TSK_MIN_STACK_SIZE                 (ALIGN(0x400, 4))
@@ -74,24 +74,24 @@ extern "C" {
                                        Semaphore module configuration
 ============================================================================= */
 #define LOSCFG_BASE_IPC_SEM                                 1
-#define LOSCFG_BASE_IPC_SEM_LIMIT                           16
+#define LOSCFG_BASE_IPC_SEM_LIMIT                           20
 /* =============================================================================
                                        Mutex module configuration
 ============================================================================= */
 #define LOSCFG_BASE_IPC_MUX                                 1
 // increase to 48, os fundermental + Devmanager + hievent + samgr cost 36~ mux
-#define LOSCFG_BASE_IPC_MUX_LIMIT                           16
+#define LOSCFG_BASE_IPC_MUX_LIMIT                           20
 /* =============================================================================
                                        Queue module configuration
 ============================================================================= */
 #define LOSCFG_BASE_IPC_QUEUE                               1
-#define LOSCFG_BASE_IPC_QUEUE_LIMIT                         16
+#define LOSCFG_BASE_IPC_QUEUE_LIMIT                         20
 /* =============================================================================
                                        Software timer module configuration
 ============================================================================= */
 #define LOSCFG_BASE_CORE_SWTMR                              1
 #define LOSCFG_BASE_CORE_SWTMR_ALIGN                        1
-#define LOSCFG_BASE_CORE_SWTMR_LIMIT                        16
+#define LOSCFG_BASE_CORE_SWTMR_LIMIT                        20
 /* =============================================================================
                                        Exception module configuration
 ============================================================================= */

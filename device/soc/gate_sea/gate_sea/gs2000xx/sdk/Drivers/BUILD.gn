@@ -20,6 +20,6 @@ module_group(module_name) {
   modules = [
     "CMSIS",
     "GS2000xx_HAL_Driver",
-    #"hdf_drivers",
+    "hdf_drivers",
   ]
 }

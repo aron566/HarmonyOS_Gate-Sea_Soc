@@ -63,21 +63,32 @@ config("public") {
     lib_dirs = [ "$root_out_dir/libs" ]
     ldflags += [
       "-Wl,--whole-archive",
+
       "-lbootstrap",
       "-lbroadcast",
       "-lhctest",
       "-lhal_sysparam",
-      #"-lmodule_ActsSamgrTest",
-      #"-lmodule_ActsBootstrapTest",
-      #"-lmodule_ActsDfxFuncTest",
-      #"-lmodule_ActsHieventLiteTest",
+
       #"-lmodule_ActsUpdaterFuncTest",
 
-      #"-lmodule_ActsHuksHalFunctionTest",
-      #"-lhuks_test_common",
+      # code:200k+
+      "-lmodule_ActsHuksHalFunctionTest",
+      "-lhuks_test_common",
 
+      #公共基础库
       "-lmodule_ActsUtilsFileTest",
+      #"-lmodule_ActsKvStoreTest",
+
+      #DFX
+      "-lmodule_ActsDfxFuncTest",
+      "-lmodule_ActsHieventLiteTest",
+
+      #启动恢复
+      "-lmodule_ActsBootstrapTest",
       "-lmodule_ActsParameterTest",
+
+      #分布式任务调度
+      "-lmodule_ActsSamgrTest",
 
       "-Wl,--no-whole-archive",
     ]

@@ -1,6 +1,6 @@
 /**
  *  @file uart.c
- *  @brief None.
+ *  @brief 串口接口.
  *  @author aron566 (wei.chen@gate-sea.com)
  *  @version v0.0.1 aron566 2024.05.22 16:14 初始版本.
  *  @date 2024-05-22
@@ -15,8 +15,8 @@
  */
 /** Includes -----------------------------------------------------------------*/
 /* Private includes ----------------------------------------------------------*/
-#include "gsmcu_usart.h"
 #include "gsmcu_hal.h"
+#include "gs2000xx_it.h"
 #include "uart.h"
 #include "los_event.h"
 /** Use C compiler -----------------------------------------------------------*/
@@ -34,6 +34,16 @@ extern "C" {
 #define BPS_UART_TRANSMITMASK (0x01 << 8)
 
 #define BPS_UART_BUFF_LENGTH (2001)
+
+#define Stop_Bits_One (USART_8Bit_StopBits_1)
+#define Stop_Bits_Two (USART_8Bit_StopBits_2)
+
+#define Parity_No   (USART_Parity_No)
+#define Parity_Even (USART_Parity_Even)
+#define Parity_Odd  (USART_Parity_Odd)
+
+#define METER_UART_DMA_CHL DMA_Channel0
+#define DEBUG_UART_DMA_CHL DMA_Channel1
 /** Private typedef ----------------------------------------------------------*/
 
 /** Private constants --------------------------------------------------------*/
@@ -55,7 +65,38 @@ static uint32_t BPS_UartRxBuffWrtieIndex;
  *
  ********************************************************************************
  */
+void UsartReceiveComplate(void)
+{
+}
 
+void UsartSendComplate(void)
+{
+}
+
+static void Debug_UartIRQ(void)
+{
+
+}
+
+/**
+ * @brief 串口初始化
+ *
+ */
+void UART_Init(void)
+{
+  UartClose();
+  UartParameterType Usart0Para      = {0};
+  Usart0Para.BaudRate               = 115200;
+  Usart0Para.DataBits               = 8;
+  Usart0Para.Parity                 = Parity_Even;
+  Usart0Para.StopBits               = Stop_Bits_One;
+  Usart0Para.RxHaveDataFunction     = UsartReceiveComplate;
+  Usart0Para.TxDataCompleteFunction = UsartSendComplate;
+  Usart0Para.RxParityErrorFunction  = NULL;
+  UartOpen(&Usart0Para);
+
+  DebugOpen(115200U);
+}
 /** Public application code --------------------------------------------------*/
 /*******************************************************************************
  *
@@ -63,7 +104,7 @@ static uint32_t BPS_UartRxBuffWrtieIndex;
  *
  ********************************************************************************
  */
-#if 0
+#if 1
 uint32_t IncreaseIndex(uint32_t idx, uint32_t buffsize)
 {
   idx++;
@@ -172,27 +213,27 @@ void DMAC_Handler_METER_UART_ISR(void);
 //
 void UartOpen(UartParameterType *UartParameter)
 {
-#if defined(METER_UART)
+  #if defined(METER_UART)
   PinRemapConfig(METER_UART_TX_PIN_REMAP, ENABLE);
   PinRemapConfig(METER_UART_RX_PIN_REMAP, ENABLE);
   SCU_PeriphInputConfig(METER_UART_INPUT_ENABLE);
   SCU_GPIOInputConfig(METER_UART_TX_PORT, METER_UART_TX_PIN);
   SCU_GPIOInputConfig(METER_UART_RX_PORT, METER_UART_RX_PIN);
   SCU_SetUsartMode(METER_UART, USART_DONT_INVERT38K_OUTPUT |
-  #if defined(METER_UART_OPEN_DRAIN)
+    #if defined(METER_UART_OPEN_DRAIN)
                                  USART_OPEN_DRAIN_ENABLE |
-  #else
+    #else
                                  USART_OPEN_DRAIN_DISABLE |
-  #endif
+    #endif
                                  USART_SELECT_NORMAL__USART_MODE | USART_IO_FAST | USART_IO_DRIVER_12MA);
   GPIO_InitTypeDef GPIO_InitStruct;
   GPIO_StructInit(&GPIO_InitStruct);
   GPIO_InitStruct.GPIO_Pin = METER_UART_RX_PIN;
-  #if DEV_CCO
+    #if DEV_CCO
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPD;
-  #else
+    #else
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
-  #endif
+    #endif
   GPIO_Init(METER_UART_RX_PORT, &GPIO_InitStruct);
 
   USART_InitTypeDef USART_InitStruct;
@@ -220,15 +261,59 @@ void UartOpen(UartParameterType *UartParameter)
   // enable interrupt
   USART_ConfigInterruptEnable(METER_UART, USART_RECEIVE_LINE_INTER_ENABLE | USART_RECEIVE_DATA_INTER_ENABLE);
   //
-  BSP_IntVectSet(METER_UART_IRQn, METER_UART_Handler_ISR);
+  // BSP_IntVectSet(METER_UART_IRQn, METER_UART_Handler_ISR);
+  NVIC_SetVector(METER_UART_IRQn, (uint32_t)METER_UART_Handler_ISR);
   // DMA
-  BSP_InitDmacVector();
+  // BSP_InitDmacVector();
   ReSet_DMA_Channel(DMA, METER_UART_DMA_CHL);
-  BSP_IntDmacChannelVectSet(METER_UART_DMA_CHL, DMAC_Handler_METER_UART_ISR);
-  //
+
+  /* 设置串口dma通道中断 */
+  GS2000xx_DMA_IT_Handler_Set((int)METER_UART_DMA_CHL, DMAC_Handler_METER_UART_ISR);
+
   NVIC_ClearPendingIRQ(METER_UART_IRQn);
   NVIC_EnableIRQ(METER_UART_IRQn);
-#endif
+  #endif
+}
+
+/**
+ * @brief 调试串口打开
+ *
+ * @param BaudRate 波特率
+ */
+void DebugOpen(uint32_t BaudRate)
+{
+  #if defined(DEBUG_UART)
+  PinRemapConfig(DEBUG_UART_TX_PIN_REMAP, ENABLE);
+  PinRemapConfig(DEBUG_UART_RX_PIN_REMAP, ENABLE);
+  SCU_PeriphInputConfig(DEBUG_UART_INPUT_ENABLE);
+  SCU_GPIOInputConfig(DEBUG_UART_TX_PORT, DEBUG_UART_TX_PIN);
+  SCU_GPIOInputConfig(DEBUG_UART_RX_PORT, DEBUG_UART_RX_PIN);
+  SCU_SetUsartMode(DEBUG_UART, USART_DONT_INVERT38K_OUTPUT | USART_OPEN_DRAIN_DISABLE | USART_SELECT_NORMAL__USART_MODE | USART_IO_FAST | USART_IO_DRIVER_12MA);
+  GPIO_InitTypeDef GPIO_InitStruct;
+  // GPIO引脚配置
+  GPIO_StructInit(&GPIO_InitStruct);
+  GPIO_InitStruct.GPIO_Pin  = DEBUG_UART_RX_PIN;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
+  GPIO_Init(DEBUG_UART_RX_PORT, &GPIO_InitStruct);
+
+  USART_InitTypeDef USART_InitStruct;
+  USART_InitStruct.USART_BaudRate            = BaudRate;
+  USART_InitStruct.USART_WordLength_StopBits = USART_8Bit_StopBits_1;
+  USART_InitStruct.USART_Parity              = USART_Parity_No;
+  USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  USART_InitStruct.USART_Fifo_Config         = USART_RXFIFO_THR_LEVEL_3 | USART_TXFIFO_THR_LEVEL_0 |
+                                       USART_RXFIFO_CLEAR | USART_TXFIFO_CLEAR | USART_FIFO_ENABLE;   // use fifo
+  // USART_InitStruct.USART_Fifo_Config = USART_FIFO_CONFIG_NONE; //not use fifo
+  USART_InitStruct.USART_DMA_Flag = ENABLE;
+  USART_Init(DEBUG_UART, &USART_InitStruct);
+
+  ReSet_DMA_Channel(DMA, DEBUG_UART_DMA_CHL);
+
+  /* 设置串口dma通道中断 */
+  GS2000xx_DMA_IT_Handler_Set((int)DEBUG_UART_DMA_CHL, Debug_UartIRQ);
+
+  printf("Debug Is Opened.\r\n");
+  #endif
 }
 
 void UartWriteWithDma(USART_TypeDef *puart, uint8_t *pbuff, uint32_t len, uint32_t dma_channel)
@@ -263,7 +348,7 @@ void UartWriteWithDma(USART_TypeDef *puart, uint8_t *pbuff, uint32_t len, uint32
 
 void UartWrite(uint8_t *pbuff, uint32_t len)
 {
-#if defined(METER_UART) && defined(METER_UART_DMA_CHL)
+  #if defined(METER_UART) && defined(METER_UART_DMA_CHL)
   // DMA
   DMA_InitTypeDef DMA_InitStruct;
   if (len < 1)
@@ -293,11 +378,11 @@ void UartWrite(uint8_t *pbuff, uint32_t len)
   Set_DMA_Channel(DMA, METER_UART_DMA_CHL);
   //
   UartStatus |= BPS_UART_TRANSMITING;
-#endif
+  #endif
 }
 uint32_t UartRead(uint8_t *pbuff, uint32_t len)
 {
-#if defined(METER_UART)
+  #if defined(METER_UART)
   if ((UartStatus & BPS_UART_OPEN_MASK) != BPS_UART_OPEN)
     return 0;
   if (len == 0)
@@ -305,9 +390,9 @@ uint32_t UartRead(uint8_t *pbuff, uint32_t len)
     len = BPS_UART_BUFF_LENGTH;
   }
   return PopSomeOfFifo(&BPS_UartRxBuffReadIndex, &BPS_UartRxBuffWrtieIndex, BPS_UartRxBuff, BPS_UART_BUFF_LENGTH, pbuff, len);
-#else
+  #else
   return -1;
-#endif
+  #endif
 }
 
 uint32_t GetUartRxDataLen()
@@ -321,42 +406,42 @@ uint32_t GetUartRxDataLen()
 
 void UartClose()
 {
-#if defined(METER_UART) && defined(METER_UART_DMA_CHL)
+  #if defined(METER_UART) && defined(METER_UART_DMA_CHL)
   if ((UartStatus & BPS_UART_OPEN_MASK) != BPS_UART_OPEN)
     return;
   NVIC_DisableIRQ(METER_UART_IRQn);
   ReSet_DMA_Channel(DMA, METER_UART_DMA_CHL);
   UartStatus = 0x00;
-#endif
+  #endif
 }
 
 bool IsUartTxData()
 {
-#if defined(METER_UART)
+  #if defined(METER_UART)
   if ((UartStatus & BPS_UART_OPEN_MASK) != BPS_UART_OPEN)
     return false;
   if ((UartStatus & BPS_UART_TRANSMITMASK) == BPS_UART_TRANSMITING)
     return true;
-#endif
+  #endif
   return false;
 }
 
 bool IsUartOpen()
 {
-#if defined(METER_UART)
+  #if defined(METER_UART)
   if ((UartStatus & BPS_UART_OPEN_MASK) != BPS_UART_OPEN)
     return false;
   return true;
-#else
+  #else
   return false;
-#endif
+  #endif
 }
 
-extern void UART_ExernExe(void);
+// extern void UART_ExernExe(void);
 void        METER_UART_Handler_ISR(void)
 {
-  UART_ExernExe();
-#if defined(METER_UART)
+  // UART_ExernExe();
+  #if defined(METER_UART)
   switch (USART_GetITAllStatus(METER_UART))
   {
     case USART_RECEIVE_DATA_READY_INTER_STATUS:
@@ -410,7 +495,7 @@ void        METER_UART_Handler_ISR(void)
       // error
       break;
   }
-#endif
+  #endif
 }
 
 #endif
