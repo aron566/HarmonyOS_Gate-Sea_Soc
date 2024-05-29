@@ -18,7 +18,9 @@
 #include "gsmcu_hal.h"
 #include "gs2000xx_it.h"
 #include "uart.h"
+#include "los_config.h"
 #include "los_event.h"
+#include "circular_queue.h"
 /** Use C compiler -----------------------------------------------------------*/
 #ifdef __cplusplus /**< use C compiler */
 extern "C" {
@@ -44,16 +46,24 @@ extern "C" {
 
 #define METER_UART_DMA_CHL DMA_Channel0
 #define DEBUG_UART_DMA_CHL DMA_Channel1
+
+#define DEBUG_RX_BUFFER_SIZE_MAX  (uint32_t)CQ_BUF_256B/**< 调试串口缓冲区大小 */
 /** Private typedef ----------------------------------------------------------*/
 
 /** Private constants --------------------------------------------------------*/
 /** Public variables ---------------------------------------------------------*/
+#if (LOSCFG_USE_SHELL == 1)
 extern EVENT_CB_S g_shellInputEvent;
+#endif
 /** Private variables --------------------------------------------------------*/
 static uint8_t BPS_UartRxBuff[BPS_UART_BUFF_LENGTH];
 
 static uint32_t BPS_UartRxBuffReadIndex;
 static uint32_t BPS_UartRxBuffWrtieIndex;
+
+/* 调试串口缓冲区 */
+static CQ_handleTypeDef Debug_CQ_Handle;
+static uint8_t Debug_CQ_Buff[DEBUG_RX_BUFFER_SIZE_MAX];
 /** Private function prototypes ----------------------------------------------*/
 
 /** Private user code --------------------------------------------------------*/
@@ -65,17 +75,84 @@ static uint32_t BPS_UartRxBuffWrtieIndex;
  *
  ********************************************************************************
  */
+
+/**
+ * @brief 串口中断处理函数
+ *
+ */
+void DEBUG_UART_Handler_ISR(void)
+{
+  uint32_t status = USART_GetITAllStatus(DEBUG_UART);
+  switch (status)
+  {
+    case USART_RECEIVE_DATA_READY_INTER_STATUS:
+    {
+      /* 取出FIFO所有数据 */
+      uint8_t data = 0U;
+      uint8_t FIFO_Len = USART_GetFifoDepth(DEBUG_UART);
+      for (uint8_t i = 0U; i < (FIFO_Len - 1U); i++)
+      {
+        data = USART_ReceiveData(DEBUG_UART);
+
+        /* 存入环形缓冲区 */
+        CQ_putData(&Debug_CQ_Handle, &data, 1U);
+      }
+      /* 通知接收完成 */
+      #if (LOSCFG_USE_SHELL == 1)
+      LOS_EventWrite(&g_shellInputEvent, 0x1);
+      #endif
+    }
+    break;
+
+    case USART_RECEIVE_DATA_TIMEOUT_INTER_STATUS:
+    {
+      uint8_t data = 0U;
+      while (USART_GetStatus(DEBUG_UART, USART_DATA_READY_STATUS) == SET)
+      {
+        data = USART_ReceiveData(DEBUG_UART);
+
+        /* 存入环形缓冲区 */
+        CQ_putData(&Debug_CQ_Handle, &data, 1U);
+      }
+
+      /* 通知接收完成 */
+      #if (LOSCFG_USE_SHELL == 1)
+      LOS_EventWrite(&g_shellInputEvent, 0x1);
+      #endif
+    }
+    break;
+
+    case USART_RECEIVE_LINE_INTER_STATUS:
+      /* read clear */
+      USART_GetAllStatus(DEBUG_UART);
+
+      /* send error occured */
+      break;
+
+    case USART_TRANSMITTER_DATA_EMPTY_INTER_STATUS:
+      /* 发送完成 */
+      break;
+
+    default:
+      /* send error occured */
+      break;
+  }
+}
+
+/**
+ * @brief 调试串口DMA中断处理
+ *
+ */
+static void DEBUG_UART_DMAC_Handler_IRQ(void)
+{
+}
+
 void UsartReceiveComplate(void)
 {
 }
 
 void UsartSendComplate(void)
 {
-}
-
-static void Debug_UartIRQ(void)
-{
-
 }
 
 /**
@@ -258,12 +335,12 @@ void UartOpen(UartParameterType *UartParameter)
   //
   UartStatus = BPS_UART_OPEN;
   InitFifo(&BPS_UartRxBuffReadIndex, &BPS_UartRxBuffWrtieIndex);
-  // enable interrupt
+  /* enable interrupt */
   USART_ConfigInterruptEnable(METER_UART, USART_RECEIVE_LINE_INTER_ENABLE | USART_RECEIVE_DATA_INTER_ENABLE);
   //
   // BSP_IntVectSet(METER_UART_IRQn, METER_UART_Handler_ISR);
   NVIC_SetVector(METER_UART_IRQn, (uint32_t)METER_UART_Handler_ISR);
-  // DMA
+  /* DMA */
   // BSP_InitDmacVector();
   ReSet_DMA_Channel(DMA, METER_UART_DMA_CHL);
 
@@ -283,14 +360,18 @@ void UartOpen(UartParameterType *UartParameter)
 void DebugOpen(uint32_t BaudRate)
 {
   #if defined(DEBUG_UART)
+  /* 初始化环形缓冲区 */
+  CQ_init(&Debug_CQ_Handle, Debug_CQ_Buff, DEBUG_RX_BUFFER_SIZE_MAX);
+
   PinRemapConfig(DEBUG_UART_TX_PIN_REMAP, ENABLE);
   PinRemapConfig(DEBUG_UART_RX_PIN_REMAP, ENABLE);
   SCU_PeriphInputConfig(DEBUG_UART_INPUT_ENABLE);
   SCU_GPIOInputConfig(DEBUG_UART_TX_PORT, DEBUG_UART_TX_PIN);
   SCU_GPIOInputConfig(DEBUG_UART_RX_PORT, DEBUG_UART_RX_PIN);
   SCU_SetUsartMode(DEBUG_UART, USART_DONT_INVERT38K_OUTPUT | USART_OPEN_DRAIN_DISABLE | USART_SELECT_NORMAL__USART_MODE | USART_IO_FAST | USART_IO_DRIVER_12MA);
+
+  /* GPIO引脚配置 */
   GPIO_InitTypeDef GPIO_InitStruct;
-  // GPIO引脚配置
   GPIO_StructInit(&GPIO_InitStruct);
   GPIO_InitStruct.GPIO_Pin  = DEBUG_UART_RX_PIN;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
@@ -310,7 +391,17 @@ void DebugOpen(uint32_t BaudRate)
   ReSet_DMA_Channel(DMA, DEBUG_UART_DMA_CHL);
 
   /* 设置串口dma通道中断 */
-  GS2000xx_DMA_IT_Handler_Set((int)DEBUG_UART_DMA_CHL, Debug_UartIRQ);
+  GS2000xx_DMA_IT_Handler_Set((int)DEBUG_UART_DMA_CHL, DEBUG_UART_DMAC_Handler_IRQ);
+
+  /* enable interrupt */
+  USART_ConfigInterruptEnable(DEBUG_UART, USART_RECEIVE_LINE_INTER_ENABLE | USART_RECEIVE_DATA_INTER_ENABLE);
+
+  /* set interrupt */
+  NVIC_SetVector(DEBUG_UART_IRQn, (uint32_t)DEBUG_UART_Handler_ISR);
+
+  /* enable interrupt */
+  NVIC_ClearPendingIRQ(DEBUG_UART_IRQn);
+  NVIC_EnableIRQ(DEBUG_UART_IRQn);
 
   printf("Debug Is Opened.\r\n");
   #endif
@@ -397,11 +488,11 @@ uint32_t UartRead(uint8_t *pbuff, uint32_t len)
 
 uint32_t GetUartRxDataLen()
 {
-#if defined(METER_UART)
+  #if defined(METER_UART)
   return GetFifoDataLen(BPS_UartRxBuffReadIndex, BPS_UartRxBuffWrtieIndex, BPS_UART_BUFF_LENGTH);
-#else
+  #else
   return -1;
-#endif
+  #endif
 }
 
 void UartClose()
@@ -438,7 +529,7 @@ bool IsUartOpen()
 }
 
 // extern void UART_ExernExe(void);
-void        METER_UART_Handler_ISR(void)
+void METER_UART_Handler_ISR(void)
 {
   // UART_ExernExe();
   #if defined(METER_UART)
@@ -512,13 +603,14 @@ void DMAC_Handler_METER_UART_ISR(void)
 }
 
 /**
- * @brief 获取串口数据
+ * @brief 获取串口数据 for shell
  *
  * @return uint8_t 数据
  */
 uint8_t UartGetc(void)
 {
   uint8_t data = 0;
+  CQ_getData(&Debug_CQ_Handle, &data, 1U);
   return data;
 }
 

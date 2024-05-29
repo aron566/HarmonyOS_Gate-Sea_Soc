@@ -176,7 +176,7 @@ void DebugOpen(uint32_t BaudRate);
 #endif
 
 /**
- * @brief 获取串口数据
+ * @brief 获取串口数据 for shell
  *
  * @return uint8_t 数据
  */

@@ -66,29 +66,29 @@ config("public") {
 
       "-lbootstrap",
       "-lbroadcast",
-      "-lhctest",
+      #"-lhctest",
       "-lhal_sysparam",
 
       #"-lmodule_ActsUpdaterFuncTest",
 
       # code:200k+
-      "-lmodule_ActsHuksHalFunctionTest",
-      "-lhuks_test_common",
+      #"-lmodule_ActsHuksHalFunctionTest",
+      #"-lhuks_test_common",
 
       #公共基础库
-      "-lmodule_ActsUtilsFileTest",
+      #"-lmodule_ActsUtilsFileTest",
       #"-lmodule_ActsKvStoreTest",
 
       #DFX
-      "-lmodule_ActsDfxFuncTest",
-      "-lmodule_ActsHieventLiteTest",
+      #"-lmodule_ActsDfxFuncTest",
+      #"-lmodule_ActsHieventLiteTest",
 
       #启动恢复
-      "-lmodule_ActsBootstrapTest",
-      "-lmodule_ActsParameterTest",
+      #"-lmodule_ActsBootstrapTest",
+      #"-lmodule_ActsParameterTest",
 
       #分布式任务调度
-      "-lmodule_ActsSamgrTest",
+      #"-lmodule_ActsSamgrTest",
 
       "-Wl,--no-whole-archive",
     ]

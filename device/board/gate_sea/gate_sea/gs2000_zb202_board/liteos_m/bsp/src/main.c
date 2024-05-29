@@ -38,6 +38,11 @@ extern "C" {
 /** Private function prototypes ----------------------------------------------*/
 extern void Error_Handler(void);
 extern void Hilog_Init(void);
+
+/* 测试代码 */
+extern void GS_Gpio_Test(void);
+extern void StartHdfSpiLittlefsTest(void);
+
 /** Private user code --------------------------------------------------------*/
 
 /** Private application code -------------------------------------------------*/
@@ -94,9 +99,6 @@ void TaskSample(void)
   }
 }
 
-extern void GS_Gpio_Test(void);
-extern void StartHdfSpiLittlefsTest(void);
-
 /** Public application code --------------------------------------------------*/
 /*******************************************************************************
  *
@@ -135,8 +137,21 @@ int main(void)
     Error_Handler();
   }
 
+#if (LOSCFG_USE_SHELL == 1)
+  ret = LosShellInit();
+  if (LOS_OK != ret)
+  {
+    printf("LosShellInit failed! ERROR: 0x%x\n", ret);
+  }
+  ret = OsShellInit();
+  if (LOS_OK != ret)
+  {
+    printf("OsShellInit failed! ERROR: 0x%x\n", ret);
+  }
+#endif
+
   /* 鸿蒙系统初始化 */
-  OHOS_SystemInit();
+  // OHOS_SystemInit();
 
 #if LOSCFG_DRIVERS_HDF
   DeviceManagerStart();
@@ -204,14 +219,6 @@ extern "C" {
 #endif
 /** Private macros -----------------------------------------------------------*/
 
-#define OHOS_APP_RUN(func)                                                                        \
-  void ohos_app_main(void)                                                                        \
-  {                                                                                               \
-    LOS_TaskDelay(100);                                                                           \
-    printf("\n\033[1;32m<--------------- OHOS Application Start Here --------------->\033[0m\n"); \
-    func();                                                                                       \
-  }
-
 /** Private typedef ----------------------------------------------------------*/
 
 /** Private constants --------------------------------------------------------*/
@@ -220,6 +227,12 @@ extern "C" {
 
 /** Private function prototypes ----------------------------------------------*/
 extern void Error_Handler(void);
+extern void Hilog_Init(void);
+
+/* 测试代码 */
+extern void GS_Gpio_Test(void);
+extern void StartHdfSpiLittlefsTest(void);
+
 /** Private user code --------------------------------------------------------*/
 
 /** Private application code -------------------------------------------------*/
@@ -311,6 +324,19 @@ int main(void)
     Error_Handler();
   }
 
+#if (LOSCFG_USE_SHELL == 1)
+  ret = LosShellInit();
+  if (LOS_OK != ret)
+  {
+    printf("LosShellInit failed! ERROR: 0x%x\n", ret);
+  }
+  ret = OsShellInit();
+  if (LOS_OK != ret)
+  {
+    printf("OsShellInit failed! ERROR: 0x%x\n", ret);
+  }
+#endif
+
   /* 鸿蒙系统初始化 */
   OHOS_SystemInit();
 
@@ -324,7 +350,14 @@ int main(void)
   /* 使用OS中断处理 */
   NVIC_SetVector(SysTick_IRQn, (uint32_t)OsTickHandler);
 
-  // FsInit();
+  /* 初始化fs */
+  FsInit();
+
+  /* 执行gpio测试 */
+  // GS_Gpio_Test();
+  /* 执行littlefs测试 */
+  // StartHdfSpiLittlefsTest();
+
   LOS_Start();
 
   while (1)
@@ -370,14 +403,6 @@ extern "C" {
 #endif
 /** Private macros -----------------------------------------------------------*/
 
-#define OHOS_APP_RUN(func)                                                                        \
-  void ohos_app_main(void)                                                                        \
-  {                                                                                               \
-    LOS_TaskDelay(100);                                                                           \
-    printf("\n\033[1;32m<--------------- OHOS Application Start Here --------------->\033[0m\n"); \
-    func();                                                                                       \
-  }
-
 /** Private typedef ----------------------------------------------------------*/
 
 /** Private constants --------------------------------------------------------*/
@@ -386,6 +411,12 @@ extern "C" {
 
 /** Private function prototypes ----------------------------------------------*/
 extern void Error_Handler(void);
+extern void Hilog_Init(void);
+
+/* 测试代码 */
+extern void GS_Gpio_Test(void);
+extern void StartHdfSpiLittlefsTest(void);
+
 /** Private user code --------------------------------------------------------*/
 
 /** Private application code -------------------------------------------------*/
@@ -470,6 +501,19 @@ int main(void)
     Error_Handler();
   }
 
+#if (LOSCFG_USE_SHELL == 1)
+  ret = LosShellInit();
+  if (LOS_OK != ret)
+  {
+    printf("LosShellInit failed! ERROR: 0x%x\n", ret);
+  }
+  ret = OsShellInit();
+  if (LOS_OK != ret)
+  {
+    printf("OsShellInit failed! ERROR: 0x%x\n", ret);
+  }
+#endif
+
   /* 鸿蒙系统初始化 */
   OHOS_SystemInit();
 
@@ -483,7 +527,14 @@ int main(void)
   /* 使用OS中断处理 */
   NVIC_SetVector(SysTick_IRQn, (uint32_t)OsTickHandler);
 
-  // FsInit();
+  /* 初始化fs */
+  FsInit();
+
+  /* 执行gpio测试 */
+  // GS_Gpio_Test();
+  /* 执行littlefs测试 */
+  // StartHdfSpiLittlefsTest();
+
   osKernelStart();
 
   while (1)

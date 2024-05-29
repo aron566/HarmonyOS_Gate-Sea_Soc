@@ -112,7 +112,7 @@ extern unsigned int __los_heap_addr_end__;
 /* =============================================================================
                                        printf module configuration
 ============================================================================= */
-#define LOSCFG_KERNEL_PRINTF                                1
+#define LOSCFG_KERNEL_PRINTF                                1/**< 0不启用内核打印，1启用内核打印 2只启用shell控制台打印 */
 
 //#define LOSCFG_FS_VFS                             1
 // #define LOSCFG_SUPPORT_LITTLEFS                             0 //in config.h at out folder
