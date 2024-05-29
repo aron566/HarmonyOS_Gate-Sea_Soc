@@ -1,0 +1,12 @@
+root {
+    platform {
+        watchdog_config {
+            watchdog0_config {
+                match_attr = "gd32f470_watchdog_0";
+                id = 0;                 //watchdog id
+                prescaler = 4;          //FWDGT prescaler: 0~6, 0:FWDGT_PSC_DIV4, 6:FWDGT_PSC_DIV256
+                reload_multiple = 500;  //FWDGT 计数器时钟 = 32KHz(IRC32K) / 64 = 0.5 KHz, 500 * 0.02 = 1s, 使得计时为1s的整数倍
+            }
+        }
+    }
+}

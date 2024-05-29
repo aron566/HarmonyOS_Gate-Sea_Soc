@@ -1,0 +1,52 @@
+root {
+    platform {
+        spi_config {
+            spi0_config {
+                match_attr = "gd32f4a0_spi_0";
+                busNum = 5;            //SPI num: 0~6
+                SpiCSPort = 6;         //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5:GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                SpiCSPin  = 9;         //GPIO管脚  N:0~15 -> GPIO_PIN_00~GPIO_PIN_15
+                SpiSckPort = 6;
+                SpiSckPin = 13;
+                SpiMosiPort = 6;
+                SpiMosiPin = 14;
+                SpiMisoPort = 6;
+                SpiMisoPin = 12;
+                TransMode = 0;           //SPI传输模式 0:全双工  1:only receive 2:双向接收 3:双向发送
+                MasterSlave = 0;         //SPI主丛模式 0:Master  1:Slave
+                Framesize = 1;           //SPI数据宽度 0:16 bits 1:8 bits
+                ClkPolarity = 0;         //clock polarity and phase 0~3
+                Nssmode = 0;             //NSS control mode 0:nss control by sofrware 1:nss control by hardware
+                Prescale = 4;            //SPI时钟系数 0:factor is 1:factor is 4 2:factor is 8 3:factor is 16 4:factor is 32 5:factor is 64 6:factor is 128 7:factor is 256
+                Endian = 0;              //SPI transmit way 0:big endian 1:little endian
+                Csnum = 2;               //SPI CS个数
+                cs_gpio_lst = [5, 5];    //SPI CS gpio列表
+            }
+            spi1_config {
+                match_attr = "gd32f4a0_qspi_0";
+                busNum = 5;            //SPI num: 0~6
+                SpiCSPort = 6;         //GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5:GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                SpiCSPin  = 9;         //GPIO管脚  N:0~15 -> GPIO_PIN_00~GPIO_PIN_15
+                SpiSckPort = 6;
+                SpiSckPin = 13;
+                SpiMosiPort = 6;
+                SpiMosiPin = 14;
+                SpiMisoPort = 6;
+                SpiMisoPin = 12;
+                SpiIO2Port = 6;
+                SPiIO2pin = 10;
+                SpiIO3Port = 6;
+                SPiIO3pin = 11;
+                TransMode = 0;           //SPI传输模式 0:全双工  1:only receive 2:双向接收 3:双向发送
+                MasterSlave = 0;         //SPI主丛模式 0:Master  1:Slave
+                Framesize = 1;           //SPI数据宽度 0:16 bits 1:8 bits
+                ClkPolarity = 0;         //clock polarity and phase 0~3
+                Nssmode = 0;             //NSS control mode 0:nss control by sofrware 1:nss control by hardware
+                Prescale = 4;            //SPI时钟系数 0:factor is 1:factor is 4 2:factor is 8 3:factor is 16 4:factor is 32 5:factor is 64 6:factor is 128 7:factor is 256
+                Endian = 0;              //SPI transmit way 0:big endian 1:little endian
+                Csnum = 3;               //SPI CS个数
+                cs_gpio_lst = [5, 5, 4];    //SPI CS gpio列表
+            }
+        }
+    }
+}
