@@ -402,7 +402,7 @@ INT32 Lfs_Init()
 
 struct HdfDriverEntry g_hdfLfsDevice = {
     .moduleVersion = 1,
-    .moduleName = "GD32_FS_LITTLEFS",
+    .moduleName = "GATE_SEA_FS_LITTLEFS",
     .Bind = HdfLfsDeviceBind,
     .Init = HdfLfsDeviceInit,
     .Release = HdfLfsDeviceRelease,

@@ -23,7 +23,7 @@
 /** Includes -----------------------------------------------------------------*/
 /* Private includes ----------------------------------------------------------*/
 #include "circular_queue.h"
-
+#include "osal_mem.h"
 /** Use C compiler -----------------------------------------------------------*/
 #ifdef __cplusplus /**< use C compiler */
 extern "C" {

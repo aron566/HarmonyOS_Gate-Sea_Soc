@@ -6,30 +6,31 @@ extern "C"
 #endif
 
 
-
-
 /** @defgroup GPIO_Exported_Types
   * @{
   */
 
-#define IS_GPIO_ALL_PERIPH(PERIPH) (((PERIPH) == GPIO0) || \
+#define IS_GPIO_ALL_PERIPH(PERIPH)  (((PERIPH) == GPIO0) || \
                                     ((PERIPH) == GPIO1))
-
+/**
+  * @}
+  */
 
 
 /**
   * @brief  Configuration Mode enumeration
   */
-
+/* bit0 [0:pull down 1:pull up] */
+/* bit1 [1:pllen enable 0:pullen disable] */
+/* bit2 [0:input 1:output] */
 typedef enum
 {
   GPIO_Mode_IN_FLOATING = 0x00,
-  GPIO_Mode_IPD = 0x02,
-  GPIO_Mode_IPU = 0x03,
-  GPIO_Mode_OPP = 0x04,
-  GPIO_Mode_OPD = 0x06,
-  GPIO_Mode_OPU = 0x07,
-
+  GPIO_Mode_IPD = 0x02,/**< ob:0010 input & pull down */
+  GPIO_Mode_IPU = 0x03,/**< ob:0011 iput & pull up */
+  GPIO_Mode_OPP = 0x04,/**< ob:0100 output */
+  GPIO_Mode_OPD = 0x06,/**< ob:0110 output & pull down */
+  GPIO_Mode_OPU = 0x07,/**< ob:0111 output & pull up */
 }GPIOMode_TypeDef;
 
 #define IS_GPIO_MODE(MODE) (((MODE) == GPIO_Mode_IN_FLOATING) || ((MODE) == GPIO_Mode_IPD) || \
@@ -42,20 +43,26 @@ typedef enum
 #define GPIO_Trigger_High_level             ((uint32_t)0x00010000)
 #define GPIO_Trigger_Low_level              ((uint32_t)0x00010001)
 /**
-  * @brief  Bit_SET and Bit_RESET enumeration
+  * @}
   */
 
+/**
+  * @brief  Bit_SET and Bit_RESET enumeration
+  */
 typedef enum
-{ Bit_RESET = 0,
+{
+  Bit_RESET = 0,
   Bit_SET
 }BitAction;
 
 #define IS_GPIO_BIT_ACTION(ACTION) (((ACTION) == Bit_RESET) || ((ACTION) == Bit_SET))
+/**
+  * @}
+  */
 
 /**
   * @brief  GPIO Init structure definition
   */
-
 typedef struct
 {
   uint32_t GPIO_Pin;             /*!< Specifies the GPIO pins to be configured.
@@ -64,20 +71,13 @@ typedef struct
   GPIOMode_TypeDef GPIO_Mode;    /*!< Specifies the operating mode for the selected pins.
                                       This parameter can be a value of @ref GPIOMode_TypeDef */
 }GPIO_InitTypeDef;
-
-
-
-
+/**
+  * @}
+  */
 
 /** @defgroup GPIO_pins_define
   * @{
   */
-enum
-{
-	GPIO_GROUP0 = 0, GPIO_GROUP1 = 1
-};
-
-
 #define GPIO_Pin_0                 ((uint32_t)0x0001)  /*!< Pin 0 selected */
 #define GPIO_Pin_1                 ((uint32_t)0x0002)  /*!< Pin 1 selected */
 #define GPIO_Pin_2                 ((uint32_t)0x0004)  /*!< Pin 2 selected */
@@ -147,7 +147,6 @@ enum
                               ((PIN) == GPIO_Pin_30) || \
                               ((PIN) == GPIO_Pin_31))
 
-
 /**
   * @}
   */
@@ -179,6 +178,10 @@ void GPIO_SetBouncePreScale(GPIO_TypeDef* GPIOx, uint32_t pre_scale);
 
 unsigned int GPIO_GetIntStatus(GPIO_TypeDef *GPIOx);
 unsigned int GPIO_ClearPortIntStatus(GPIO_TypeDef *GPIOx, unsigned int pins);
+/**
+  * @}
+  */
+
 #ifdef __cplusplus
 }
 #endif

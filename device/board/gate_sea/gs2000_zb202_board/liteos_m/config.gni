@@ -85,6 +85,7 @@ board_ld_flags = [
   "-Wl,--wrap=_free_r",
   "-Wl,--wrap=_memalign_r",
   "-Wl,--wrap=_malloc_usable_size_r",
+  #"-Wl,--wrap=_printf_r",
 ]
 board_ld_flags += board_opt_flags
 

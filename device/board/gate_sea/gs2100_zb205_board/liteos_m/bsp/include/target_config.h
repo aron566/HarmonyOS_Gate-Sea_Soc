@@ -35,7 +35,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "los_compiler.h"
-#include "stm32f4xx.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -46,7 +45,7 @@ extern "C" {
 /* =============================================================================
                                         System clock module configuration
 ============================================================================= */
-#define OS_SYS_CLOCK                                        168000000 // updated by HAL_RCC_OscConfig in main.c
+#define OS_SYS_CLOCK                                        SystemCoreClock
 #define LOSCFG_BASE_CORE_TICK_PER_SECOND                    (1000UL)
 #define LOSCFG_BASE_CORE_TICK_HW_TIME                       0
 #define LOSCFG_BASE_CORE_TICK_WTIMER                        0
@@ -57,42 +56,42 @@ extern "C" {
 ============================================================================= */
 #define LOSCFG_PLATFORM_HWI                                 1
 #define LOSCFG_USE_SYSTEM_DEFINED_INTERRUPT                 1
-#define LOSCFG_PLATFORM_HWI_LIMIT                           84
+#define LOSCFG_PLATFORM_HWI_LIMIT                           84//96
 
 /* =============================================================================
                                        Task module configuration
 ============================================================================= */
 #define LOSCFG_BASE_CORE_TSK_LIMIT                          32
-#define LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE                (0x1000U)
-#define LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE             (0x1000U)
+#define LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE                (0x400U)
+#define LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE             (0x400U)
 #define LOSCFG_BASE_CORE_TSK_MIN_STACK_SIZE                 (ALIGN(0x80, 4))
 #define LOSCFG_BASE_CORE_TIMESLICE                          1
-#define LOSCFG_BASE_CORE_TIMESLICE_TIMEOUT                  1000
+#define LOSCFG_BASE_CORE_TIMESLICE_TIMEOUT                  10
 #define LOSCFG_BASE_CORE_TSK_MONITOR                        1
-#define LOSCFG_BASE_CORE_EXC_TSK_SWITCH                     0
+#define LOSCFG_BASE_CORE_EXC_TSK_SWITCH                     1
 
 /* =============================================================================
                                        Semaphore module configuration
 ============================================================================= */
 #define LOSCFG_BASE_IPC_SEM                                 1
-#define LOSCFG_BASE_IPC_SEM_LIMIT                           48
+#define LOSCFG_BASE_IPC_SEM_LIMIT                           20
 /* =============================================================================
                                        Mutex module configuration
 ============================================================================= */
 #define LOSCFG_BASE_IPC_MUX                                 1
 // increase to 48, os fundermental + Devmanager + hievent + samgr cost 36~ mux
-#define LOSCFG_BASE_IPC_MUX_LIMIT                           48
+#define LOSCFG_BASE_IPC_MUX_LIMIT                           20
 /* =============================================================================
                                        Queue module configuration
 ============================================================================= */
 #define LOSCFG_BASE_IPC_QUEUE                               1
-#define LOSCFG_BASE_IPC_QUEUE_LIMIT                         24
+#define LOSCFG_BASE_IPC_QUEUE_LIMIT                         20
 /* =============================================================================
                                        Software timer module configuration
 ============================================================================= */
 #define LOSCFG_BASE_CORE_SWTMR                              1
-#define LOSCFG_BASE_CORE_SWTMR_ALIGN                        0
-#define LOSCFG_BASE_CORE_SWTMR_LIMIT                        48
+#define LOSCFG_BASE_CORE_SWTMR_ALIGN                        1
+#define LOSCFG_BASE_CORE_SWTMR_LIMIT                        20
 /* =============================================================================
                                        Exception module configuration
 ============================================================================= */
@@ -106,17 +105,17 @@ extern unsigned int __los_heap_addr_end__;
 #define LOSCFG_SYS_HEAP_ADDR                                ((void *)&__los_heap_addr_start__)
 #define LOSCFG_SYS_HEAP_SIZE                                (((unsigned int)&__los_heap_addr_end__) - ((unsigned int)&__los_heap_addr_start__))
 #define LOSCFG_MEM_MUL_POOL                                 1
-#define OS_SYS_MEM_NUM                                      20
+#define OS_SYS_MEM_NUM                                      32
 #define LOSCFG_MEM_FREE_BY_TASKID                           1
 #define LOSCFG_BASE_MEM_NODE_INTEGRITY_CHECK                0
 #define LOSCFG_MEM_LEAKCHECK                                0
 /* =============================================================================
                                        printf module configuration
 ============================================================================= */
-#define LOSCFG_KERNEL_PRINTF                                1
+#define LOSCFG_KERNEL_PRINTF                                1/**< 0不启用内核打印，1启用内核打印 2只启用shell控制台打印 */
 
 //#define LOSCFG_FS_VFS                             1
-#define LOSCFG_SUPPORT_LITTLEFS                             1
+// #define LOSCFG_SUPPORT_LITTLEFS                             0 //in config.h at out folder
 
 #ifdef __cplusplus
 #if __cplusplus

@@ -18,10 +18,10 @@ kernel_type = "liteos_m"
 kernel_version = "3.0.0"
 
 # Board CPU type, e.g. "cortex-a7", "riscv32".
-board_cpu = "cortex-m4"
+board_cpu = "cortex-m3"
 
 # Board arch, e.g.  "armv7-a", "rv32imac".
-board_arch = ""
+board_arch = "armv7-m"
 
 # Toolchain name used for system compiling.
 # E.g. gcc-arm-none-eabi, arm-linux-harmonyeabi-gcc, ohos-clang,  riscv32-unknown-elf.
@@ -40,10 +40,12 @@ board_toolchain_prefix = "arm-none-eabi-"
 board_toolchain_type = "gcc"
 
 board_opt_flags = [
-  "-mcpu=cortex-m4",
+  "-mcpu=cortex-m3",
   "-mthumb",
-  "-mfpu=fpv4-sp-d16",
-  "-mfloat-abi=hard",
+  "-mfloat-abi=soft",
+  "-mfpu=vfpv3",
+  #"-mfpu=fpv4-sp-d16",
+  #"-mfloat-abi=hard",
 ]
 
 # Board related common compile flags.
@@ -52,28 +54,12 @@ board_cflags = [
   "-Wall",
   "-fdata-sections",
   "-ffunction-sections",
-  "-DUSE_HAL_DRIVER",
-  "-DSTM32F407xx",
-  "-DUSE_FULL_LL_DRIVER",
+  "-DAES_WAFER_ID",
+  "-DZB205_CHIP",
   "-D__LITEOS_M__",
+  #"-Wextra",
+  #"-Wpedantic", warning: ISO C99 doesn't support unnamed structs/unions [-Wpedantic]
 ]
-#board_opt_flags = [
-#  "-mcpu=cortex-m3",
-#  "-mthumb",
-#  "-mfpu=fpv4-sp-d16",
-#  "-mfloat-abi=hard",
-#]
-
-# Board related common compile flags.
-#board_cflags = [
-#  "-Og",
-#  "-Wall",
-#  "-fdata-sections",
-#  "-ffunction-sections",
-#  "-DAES_WAFER_ID",
-#  "-DZB205_CHIP",
-#  "-D__LITEOS_M__",
-#]
 board_cflags += board_opt_flags
 
 board_asmflags = [
@@ -81,6 +67,9 @@ board_asmflags = [
   "-Wall",
   "-fdata-sections",
   "-ffunction-sections",
+  #"-x assembler-with-cpp",
+  "-MMD",
+  "-MP"
 ]
 board_asmflags += board_opt_flags
 
@@ -96,6 +85,7 @@ board_ld_flags = [
   "-Wl,--wrap=_free_r",
   "-Wl,--wrap=_memalign_r",
   "-Wl,--wrap=_malloc_usable_size_r",
+  #"-Wl,--wrap=_printf_r",
 ]
 board_ld_flags += board_opt_flags
 

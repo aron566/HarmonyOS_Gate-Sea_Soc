@@ -15,13 +15,24 @@ import("//kernel/liteos_m/liteos.gni")
 
 module_name = get_path_info(rebase_path("."), "name")
 kernel_module(module_name) {
-  sources = [ "startup/startup_stm32f407xx.s" ]
+  sources = [ "startup/startup_gs2100xx.s" ]
 
   sources += [
     "src/dprintf.c",
     "src/main.c",
-    "src/stm32f4xx_hal_msp.c",
-    "src/system_stm32f4xx.c",
+    "src/gs2100xx_hal_msp.c",
+    #"src/gs2100xx_it.c",
+    #"src/uart.c",
+    "src/bps_debug.c",
+    "src/bps_timer.c",
+    "src/bps_flash.c",
+    "src/bps_uart.c",
+    "src/bsp_wdg.c",
+    "src/bps_led.c",
+    "src/bps_zerocross.c",
+    "src/system_GSMCU_M3.c",
+    "src/bps_port.c",
+    "src/bsp.c",
   ]
 
   include_dirs = [
@@ -40,19 +51,20 @@ kernel_module(module_name) {
   }
 }
 
+# ohos_board_adapter_dir device/soc/xxx
 config("public") {
   include_dirs = [
     ".",
     "include",
-    "//device/soc/stm/stm32f4xx/sdk/Core/Inc",
-    "//device/soc/stm/stm32f4xx/sdk/Drivers/STM32F4xx_HAL_Driver/Inc",
-    "//device/soc/stm/stm32f4xx/sdk/Drivers/CMSIS/Device/ST/STM32F4xx/Include",
+    "$ohos_board_adapter_dir/Core/Inc",
+    "$ohos_board_adapter_dir/Drivers/GS2100xx_HAL_Driver/Inc",
+    "$ohos_board_adapter_dir/Drivers/CMSIS/Device/gate-sea/GS2100xx/Include",
     "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/samgr",
     "//drivers/hdf_core/framework/core/common/include/manager",
   ]
 
   ldflags = [
-    "-Wl,-T" + rebase_path("ld/STM32F407VGTx_FLASH.ld"),
+    "-Wl,-T" + rebase_path("ld/GS2100xx_ZB205_FLASH.ld"),
     "-Wl,-u_printf_float",
   ]
 
@@ -60,21 +72,32 @@ config("public") {
     lib_dirs = [ "$root_out_dir/libs" ]
     ldflags += [
       "-Wl,--whole-archive",
+
       "-lbootstrap",
       "-lbroadcast",
-      "-lhctest",
+      #"-lhctest",
       "-lhal_sysparam",
-      #"-lmodule_ActsSamgrTest",
-      #"-lmodule_ActsBootstrapTest",
-      #"-lmodule_ActsDfxFuncTest",
-      #"-lmodule_ActsHieventLiteTest",
+
       #"-lmodule_ActsUpdaterFuncTest",
 
+      # code:200k+
       #"-lmodule_ActsHuksHalFunctionTest",
       #"-lhuks_test_common",
 
-      "-lmodule_ActsUtilsFileTest",
-      "-lmodule_ActsParameterTest",
+      #公共基础库
+      #"-lmodule_ActsUtilsFileTest",
+      #"-lmodule_ActsKvStoreTest",
+
+      #DFX
+      #"-lmodule_ActsDfxFuncTest",
+      #"-lmodule_ActsHieventLiteTest",
+
+      #启动恢复
+      #"-lmodule_ActsBootstrapTest",
+      #"-lmodule_ActsParameterTest",
+
+      #分布式任务调度
+      #"-lmodule_ActsSamgrTest",
 
       "-Wl,--no-whole-archive",
     ]

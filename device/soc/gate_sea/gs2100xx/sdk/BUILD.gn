@@ -11,37 +11,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//kernel/liteos_m/liteos.gni")
+#import("//build/lite/config/component/lite_component.gni")
+#import("//build/lite/config/subsystem/lite_subsystem.gni")
+#import("//kernel/liteos_m/liteos.gni")
 
-module_name = "gs2100xx_sdk"
+#module_name = "gs2100xx_sdk"
 
-kernel_module(module_name) {
-  asmflags = board_asmflags
+#get_path_info(rebase_path("."), "name")
 
-  sources = [
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dac.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dac_ex.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_eth.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_gpio.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.c",
-    "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_spi.c",
-  ]
+#module_group(module_name) {
+#  modules = [
+#    "Drivers",
+#    "hals",
+#  ]
+#}
+
+#kernel_module(module_name) {
+#  asmflags = board_asmflags
+#}
+
+if (ohos_kernel_type == "liteos_m") {
+  import("//kernel/liteos_m/liteos.gni")
+  module_name = get_path_info(rebase_path("."), "name")
+  module_group(module_name) {
+    modules = [
+      "Drivers",
+      #"hals",
+    ]
+  }
 }

@@ -35,7 +35,7 @@ RAMFUNC void FLASH_Init(void)
   if ((FTSPI->CR & (0x01UL << 20)) != 0)
   {
     FTSPI->CR = FTSPI->CR & (~(0x01UL << 20));   // 切换模式
-    while (FTSPI->CR & (0x01UL << 20))
+    while ((FTSPI->CR & (0x01UL << 20)))
       ;                                          // 由1变成0
     // while(((FTSPI->CR&(0x01UL<<8)) == 1)); //由1变成0
   }
@@ -60,7 +60,21 @@ RAMFUNC void FLASH_Close(void)
   }
   FTSPI->XIPCMD = 0x0006B208;
 }
-
+void FLASH_WaitCmdDone(void)
+{
+  int wait_cnt = 350000;   // 大概等待1.1s的时间 足够当前代码中的任何操作完成了
+  for (; wait_cnt > 0; wait_cnt--)
+  {
+    if ((FLASH_GetFalshStatus(1) & 0x01) != 0x01)
+    {
+      break;
+    }
+  }
+  if (wait_cnt == 0)   // 超出等待时间 需要复位
+  {
+    FLASH_Reset();
+  }
+}
 /**
  * @brief
  * @param
@@ -121,9 +135,7 @@ RAMFUNC void FLASH_WriteFlashStatus(uint8_t regx, uint32_t data)
   while ((FTSPI->ISR & 0x01) == 0x00)
     ;
   FTSPI->ISR = 0x01;
-
-  while ((FLASH_GetFalshStatus(1) & 0x01) == 0x01)
-    ;
+  FLASH_WaitCmdDone();
 }
 
 RAMFUNC void FLASH_WriteFlashStatusNoVolatile(uint8_t regx, uint32_t data)
@@ -158,8 +170,7 @@ RAMFUNC void FLASH_WriteFlashStatusNoVolatile(uint8_t regx, uint32_t data)
     ;
   FTSPI->ISR = 0x01;
 
-  while ((FLASH_GetFalshStatus(1) & 0x01) == 0x01)
-    ;
+  FLASH_WaitCmdDone();
 }
 
 /**
@@ -188,8 +199,7 @@ RAMFUNC void FLASH_EarseBlock(uint32_t block_start)
     ;
   FTSPI->ISR = 0x01;
 
-  while ((FLASH_GetFalshStatus(1) & 0x01) == 0x01)
-    ;
+  FLASH_WaitCmdDone();
 }
 
 /**
@@ -233,8 +243,7 @@ RAMFUNC void FLASH_ProgramPackageData(uint32_t Package_start, uint32_t *pdata, u
     ;
   FTSPI->ISR = 0x01;
 
-  while ((FLASH_GetFalshStatus(1) & 0x01) == 0x01)
-    ;
+  FLASH_WaitCmdDone();
 }
 
 /**
@@ -298,8 +307,7 @@ RAMFUNC void FLASH_ProgramPackageBytes(uint32_t Package_start, uint8_t *pdata, u
     ;
   FTSPI->ISR = 0x01;
 
-  while ((FLASH_GetFalshStatus(1) & 0x01) == 0x01)
-    ;
+  FLASH_WaitCmdDone();
 }
 /**
  * @brief
@@ -385,16 +393,13 @@ RAMFUNC void FLASH_GetPackageBytes(uint32_t Package_start, uint8_t *pdata, uint3
 }
 #endif
 // 0x0015400B
-u32 data_flash_read_flash_id()
+static u32 FLASH_GetId(void)
 {
   u32 flash_id = 0;
-
-  FLASH_Init();
-
-  FTSPI->CMD0 = (uint32_t)0x00;
-  FTSPI->CMD1 = (0x00UL << 28) | (0x01UL << 24) | (0x00UL << 16) | (0x00UL << 0);
-  FTSPI->CMD2 = 3;
-  FTSPI->CMD3 = (0X9FUL << 24) | (0x00UL << 16) | (0x00UL << 8) | (0x00UL << 5) | (0x00UL << 4) | (0x00UL << 3) | (0x00UL << 2) | (0x00UL << 1);
+  FTSPI->CMD0  = (uint32_t)0x00;
+  FTSPI->CMD1  = (0x00UL << 28) | (0x01UL << 24) | (0x00UL << 16) | (0x00UL << 0);
+  FTSPI->CMD2  = 3;
+  FTSPI->CMD3  = (0X9FUL << 24) | (0x00UL << 16) | (0x00UL << 8) | (0x00UL << 5) | (0x00UL << 4) | (0x00UL << 3) | (0x00UL << 2) | (0x00UL << 1);
 
   while ((FTSPI->SR & 0x02) == 0x00)
     ;
@@ -403,9 +408,15 @@ u32 data_flash_read_flash_id()
   while ((FTSPI->ISR & 0x01) == 0x00)
     ;
   FTSPI->ISR = 0x01;
+  return flash_id;
+}
+u32 data_flash_read_flash_id()
+{
+  u32 flash_id = 0;
 
-  // flash_id = (FTSPI->DR);
+  FLASH_Init();
 
+  flash_id = FLASH_GetId();
   FLASH_Close();
 
   return flash_id;
@@ -422,10 +433,11 @@ void     GetDevFlashID(void)
       0x00144020,   // WHXX 1M
       0x00154020,   // WHXX 2M
       0x0014605e,   // new flash
+      0x001540A1,   // FM
       0x0014400b,   // XTX 1M
       0x0015400b,   // XTX 2M
     };
-  for (i = 0; i < sizeof(FlashArray); i++)
+  for (i = 0; i < sizeof(FlashArray) / 4; i++)
   {
     if (dev_flash_id == FlashArray[i])
     {
@@ -485,4 +497,48 @@ RAMFUNC void FLASH_GetSecurity(uint32_t reg_num, uint32_t addr, uint32_t *pdata,
   while ((FTSPI->ISR & 0x01) == 0x00)
     ;
   FTSPI->ISR = 0x01;
+}
+// 只有发生异常时才进行flash复位
+RAMFUNC void FLASH_Reset(void)
+{
+  // write enable
+  FTSPI->CMD0 = (uint32_t)0x00;
+  FTSPI->CMD1 = (0x00UL << 28) | (0x01UL << 24) | (0x00UL << 16) | (0x00UL << 0);
+  FTSPI->CMD2 = 0;
+  FTSPI->CMD3 = (0x66 << 24) | (0x00UL << 16) | (0x00UL << 8) | (0x00UL << 5) | (0x00UL << 4) | (0x00UL << 3) | (0x00UL << 2) | (0x01UL << 1);
+  while ((FTSPI->ISR & 0x01) == 0x00)
+    ;
+  FTSPI->ISR = 0x01;
+
+  FTSPI->CMD0 = (uint32_t)0x00;
+  FTSPI->CMD1 = (0x00UL << 28) | (0x01UL << 24) | (0x00UL << 16) | (0x00UL << 0);
+  FTSPI->CMD2 = 0;
+  FTSPI->CMD3 = (uint32_t)(0x99 << 24) | (0x00UL << 16) | (0x00UL << 8) | (0x00UL << 5) | (0x00UL << 4) | (0x00UL << 3) | (0x00UL << 2) | (0x01UL << 1);
+  while ((FTSPI->ISR & 0x01) == 0x00)
+    ;
+  FTSPI->ISR = 0x01;
+
+  // Reset操作后到Flash下一个指令增加延时
+  volatile int i = 1450;   // 默认20us
+  if (dev_flash_id == 0)
+  {
+    i = 1450;   // 60us
+  }
+  while (i--)
+  {
+    ;
+  }
+
+  while ((FLASH_GetFalshStatus(1) & 0x01) == 0x01)
+    ;
+}
+
+void FLASH_ResetAtFault(void)
+{
+  // write enable
+  if (FLASH_GetId() == dev_flash_id)
+  {
+    return;
+  }
+  FLASH_Reset();
 }

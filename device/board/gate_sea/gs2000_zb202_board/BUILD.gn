@@ -19,7 +19,7 @@ if (ohos_kernel_type == "liteos_m") {
   module_group(module_name) {
     modules = [
       "liteos_m",
-      #"applications",
+      "application",
       "utils",
     ]
   }

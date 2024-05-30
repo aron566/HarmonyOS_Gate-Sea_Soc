@@ -22,3 +22,9 @@ kernel_module(module_name) {
     "./",
   ]
 }
+
+config("public") {
+  include_dirs = [
+    "./",
+  ]
+}

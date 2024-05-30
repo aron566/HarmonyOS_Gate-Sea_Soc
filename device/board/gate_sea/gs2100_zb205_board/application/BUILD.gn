@@ -14,9 +14,23 @@
 import("//kernel/liteos_m/liteos.gni")
 
 module_name = get_path_info(rebase_path("."), "name")
-module_switch = defined(LOSCFG_BOARD_GS2100_ZB205_BOARD)
-kernel_module(module_name) {
-    sources = [
-      "gpio/gpio_test.c"
+
+#import("//build/lite/config/component/lite_component.gni")
+#import("//build/lite/config/subsystem/lite_subsystem.gni")
+#import("//kernel/liteos_m/liteos.gni")
+
+module_group(module_name) {
+  modules = [
+    "gpio",
+    #"i2c",
+    #"spi",
+    #"qspi",
+    "lfs",
+    #"adc",
+    #"dac",
+    #"rtc",
+    #"pwm",
+    #"wdt",
+    #"uart",
   ]
 }

@@ -61,10 +61,10 @@ extern "C" {
 /* =============================================================================
                                        Task module configuration
 ============================================================================= */
-#define LOSCFG_BASE_CORE_TSK_LIMIT                          15
-#define LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE                (0x500U)
-#define LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE             (0x500U)
-#define LOSCFG_BASE_CORE_TSK_MIN_STACK_SIZE                 (ALIGN(0x200, 4))
+#define LOSCFG_BASE_CORE_TSK_LIMIT                          20
+#define LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE                (0x400U)
+#define LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE             (0x400U)
+#define LOSCFG_BASE_CORE_TSK_MIN_STACK_SIZE                 (ALIGN(0x400, 4))
 #define LOSCFG_BASE_CORE_TIMESLICE                          1
 #define LOSCFG_BASE_CORE_TIMESLICE_TIMEOUT                  10
 #define LOSCFG_BASE_CORE_TSK_MONITOR                        1
@@ -80,18 +80,18 @@ extern "C" {
 ============================================================================= */
 #define LOSCFG_BASE_IPC_MUX                                 1
 // increase to 48, os fundermental + Devmanager + hievent + samgr cost 36~ mux
-#define LOSCFG_BASE_IPC_MUX_LIMIT                           15
+#define LOSCFG_BASE_IPC_MUX_LIMIT                           20
 /* =============================================================================
                                        Queue module configuration
 ============================================================================= */
 #define LOSCFG_BASE_IPC_QUEUE                               1
-#define LOSCFG_BASE_IPC_QUEUE_LIMIT                         10
+#define LOSCFG_BASE_IPC_QUEUE_LIMIT                         20
 /* =============================================================================
                                        Software timer module configuration
 ============================================================================= */
 #define LOSCFG_BASE_CORE_SWTMR                              1
 #define LOSCFG_BASE_CORE_SWTMR_ALIGN                        1
-#define LOSCFG_BASE_CORE_SWTMR_LIMIT                        16
+#define LOSCFG_BASE_CORE_SWTMR_LIMIT                        20
 /* =============================================================================
                                        Exception module configuration
 ============================================================================= */
@@ -105,14 +105,14 @@ extern unsigned int __los_heap_addr_end__;
 #define LOSCFG_SYS_HEAP_ADDR                                ((void *)&__los_heap_addr_start__)
 #define LOSCFG_SYS_HEAP_SIZE                                (((unsigned int)&__los_heap_addr_end__) - ((unsigned int)&__los_heap_addr_start__))
 #define LOSCFG_MEM_MUL_POOL                                 1
-#define OS_SYS_MEM_NUM                                      20
+#define OS_SYS_MEM_NUM                                      32
 #define LOSCFG_MEM_FREE_BY_TASKID                           1
 #define LOSCFG_BASE_MEM_NODE_INTEGRITY_CHECK                0
 #define LOSCFG_MEM_LEAKCHECK                                0
 /* =============================================================================
                                        printf module configuration
 ============================================================================= */
-#define LOSCFG_KERNEL_PRINTF                                1
+#define LOSCFG_KERNEL_PRINTF                                1/**< 0不启用内核打印，1启用内核打印 2只启用shell控制台打印 */
 
 //#define LOSCFG_FS_VFS                             1
 // #define LOSCFG_SUPPORT_LITTLEFS                             0 //in config.h at out folder

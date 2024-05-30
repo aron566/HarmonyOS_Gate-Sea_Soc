@@ -1,6 +1,6 @@
 /**
  *  @file gs2000xx_it.c
- *  @brief None.
+ *  @brief 中断处理.
  *  @author aron566 (wei.chen@gate-sea.com)
  *  @version v0.0.1 aron566 2024.05.23 09:44 初始版本.
  *  @date 2024-05-23
@@ -14,10 +14,9 @@
  *  @copyright Copyright (c) 2024  Suzhou Gate-Sea Co.,Ltd.
  */
 /** Includes -----------------------------------------------------------------*/
-#include <stdio.h>
-#include <stdint.h>
 /* Private includes ----------------------------------------------------------*/
-#include "gsmcuxx_hal_def.h"
+#include "gs2000xx_it.h"
+#include "gsmcu_hal.h"
 /** Use C compiler -----------------------------------------------------------*/
 #ifdef __cplusplus /**< use C compiler */
 extern "C" {
@@ -29,6 +28,10 @@ extern "C" {
 /** Private constants --------------------------------------------------------*/
 /** Public variables ---------------------------------------------------------*/
 /** Private variables --------------------------------------------------------*/
+
+/* DMA中断处理函数 */
+static IT_CALLBACK_Typedef_t DMA_Channel_IT_Handler[(int)DMA_Channel7 + 1] = {NULL};
+
 
 /** Private function prototypes ----------------------------------------------*/
 
@@ -51,6 +54,15 @@ extern "C" {
  */
 
 /**
+ * @brief systick interrupt
+ *
+ */
+void SysTick_Handler(void)
+{
+  return;
+}
+
+/**
  * @brief sleep wakeup interrupt handler
  *
  */
@@ -71,6 +83,40 @@ void WWDG_Handler(void)
   Feed_WDG();
   WDG_Enable();
   WDG_Disable();
+}
+
+/**
+ * @brief dma interrupt
+ *
+ */
+void DMAC_Handler(void)
+{
+  uint32_t status = DMA_GetITStatus(DMA);
+  uint32_t channelmsk  = 0x01;
+  for (int i = 0; i <= (DMA_Channel7); i++)
+  {
+    if ((status & (channelmsk << i)) == (channelmsk << i))
+    {
+      if (DMA_Channel_IT_Handler[i] != NULL)
+      {
+        DMA_Channel_IT_Handler[i]();
+      }
+
+      /* clear it flag */
+      DMA_ClearChannelTCITStatus(DMA, i);
+    }
+  }
+}
+
+/**
+ * @brief 设置dma chanel 中断处理函数
+ *
+ * @param ch 通道号 @ref dma_channel_t
+ * @param func 中断处理函数
+ */
+void GS2000xx_DMA_IT_Handler_Set(int ch, IT_CALLBACK_Typedef_t func)
+{
+  DMA_Channel_IT_Handler[ch] = func;
 }
 
 #ifdef __cplusplus /**< end extern c */

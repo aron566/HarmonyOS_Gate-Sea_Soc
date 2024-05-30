@@ -103,4 +103,5 @@ GateSea HPLC STA Board Defines
 #define ZERO_EDGE_AREA 1
 // 0下降沿 1上升沿
 #define ZERO_EDGE_SHANXI_ASK 0
+
 #endif

@@ -264,7 +264,6 @@ void SystemInit(void)
   PLL_default();
   //	trim_PLL(0);
   SystemCoreClock = SYSCLK_FREQ_MHZ;
-  __enable_irq();
 }
 
 /**

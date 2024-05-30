@@ -1,150 +1,286 @@
-/*
- * Copyright (c) 2022 Hihope Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+/**
+ *  @file main.c
+ *  @brief None.
+ *  @author aron566 (wei.chen@gate-sea.com)
+ *  @version v0.0.1 aron566 2024.05.21 11:08 初始版本.
+ *  @date 2024-05-21
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  @details None.
+ *  @par 修改日志:
+ *  <table>
+ *  <tr><th>Date       <th>Version <th>Author  <th>Description
+ *  <tr><td>2024-05-21 <td>v0.0.1  <td>aron566 <td>初始版本
+ *  </table>
+ *  @copyright Copyright (c) 2024  Suzhou Gate-Sea Co.,Ltd.
  */
-#include "main.h"
+/** Includes -----------------------------------------------------------------*/
+#include "stdio.h"
+/* Private includes ----------------------------------------------------------*/
 #include "los_config.h"
+#include "ohos_init.h"
+#include "ohos_types.h"
 #include "fs_init_sdk.h"
-void SystemClock_Config(void);
-
-int main(void)
-{
-    int ret;
-    
-    HAL_Init();
-    SystemClock_Config();
-    MX_USARTx_UART_Init();
-
-    printf("%s user main!\n", __TIME__);
-    ret = LOS_KernelInit();
-    if (ret == LOS_OK) {
-#if 0//def LOSCFG_DRIVERS_HDF
-        DeviceManagerStart();
+#include "gsmcu_iwdg.h"
+#include "los_task.h"
+#include "gsmcu_hal.h"
+// #include "uart.h"
+#include "bsp.h"
+/** Use C compiler -----------------------------------------------------------*/
+#ifdef __cplusplus /**< use C compiler */
+extern "C" {
 #endif
-        OHOS_SystemInit();
-        FsInit();
-        LOS_Start();
-    }
+/** Private macros -----------------------------------------------------------*/
 
-    while (1) {
-        printf("Error\r\n");
-    }
-}
+/** Private typedef ----------------------------------------------------------*/
 
-#if 1 //ELE-VATE
-void SystemClock_Config(void)
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+/** Private constants --------------------------------------------------------*/
+/** Public variables ---------------------------------------------------------*/
+/** Private variables --------------------------------------------------------*/
 
-  /** Configure the main internal regulator output voltage
-  */
-  __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+/** Private function prototypes ----------------------------------------------*/
+extern void Error_Handler(void);
+extern void Hilog_Init(void);
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 8;
-  RCC_OscInitStruct.PLL.PLLN = 84;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
+/* 测试代码 */
+extern void GS_Gpio_Test(void);
+extern void StartHdfSpiLittlefsTest(void);
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+/** Private user code --------------------------------------------------------*/
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
-#endif
-#if 0 //SUN HI
-void SystemClock_Config(void)
-{
-  HAL_StatusTypeDef    ret = HAL_OK;
-
-  RCC_OscInitTypeDef RCC_OscInitStruct;
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
-
-  __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-
-  /* Initializes the CPU, AHB and APB busses clocks */
-  // fixme: MUST be tuned for Target Board
-  // following the result from stm32cubeMX, and all the outputs are the max CLK
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLP_DIV8;
-  RCC_OscInitStruct.PLL.PLLN = 168;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLP_DIV4;
-
-  ret = HAL_RCC_OscConfig(&RCC_OscInitStruct);
-
-  if(ret != HAL_OK)    while(1);
-
-  /*Initializes the CPU, AHB and APB busses clocks*/
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
-
-  ret = HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4);
-
-  if(ret != HAL_OK)    while(1);
-
-}
-#endif
-
-#ifdef  USE_FULL_ASSERT
+/** Private application code -------------------------------------------------*/
+/*******************************************************************************
+ *
+ *       Static code
+ *
+ ********************************************************************************
+ */
 
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t *file, uint32_t line)
-{ 
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-
-  /* Infinite loop */
+ * @brief 测试任务1
+ *
+ */
+void TaskSampleEntry2(void)
+{
   while (1)
   {
+    printf("TaskSampleEntry2 running...\r\n");
+    (void)LOS_TaskDelay(2000); /* 2000 millisecond */
   }
 }
+
+/**
+ * @brief 测试任务2
+ *
+ */
+void TaskSampleEntry1(void)
+{
+  while (1)
+  {
+    printf("TaskSampleEntry1 running...\r\n");
+    (void)LOS_TaskDelay(2000); /* 2000 millisecond */
+  }
+}
+
+/**
+ * @brief 测试任务初始化
+ *
+ */
+void TaskSample(void)
+{
+  UINT32           uwRet;
+  UINT32           taskID1;
+  UINT32           taskID2;
+  TSK_INIT_PARAM_S stTask = {0};
+
+  stTask.pfnTaskEntry = (TSK_ENTRY_FUNC)TaskSampleEntry1;
+  stTask.uwStackSize  = LOSCFG_BASE_CORE_TSK_MIN_STACK_SIZE;
+  stTask.pcName       = "TaskSampleEntry1";
+  stTask.usTaskPrio   = 6; /* Os task priority is 6 */
+  uwRet               = LOS_TaskCreate(&taskID1, &stTask);
+  if (uwRet != LOS_OK)
+  {
+    printf("Task1 create failed\r\n");
+  }
+
+  stTask.pfnTaskEntry = (TSK_ENTRY_FUNC)TaskSampleEntry2;
+  stTask.uwStackSize  = LOSCFG_BASE_CORE_TSK_MIN_STACK_SIZE;
+  stTask.pcName       = "TaskSampleEntry2";
+  stTask.usTaskPrio   = 7; /* Os task priority is 7 */
+  uwRet               = LOS_TaskCreate(&taskID2, &stTask);
+  if (uwRet != LOS_OK)
+  {
+    printf("Task2 create failed\r\n");
+  }
+}
+
+const uint32_t myDevicType = 0xffff;
+// 此函数必须在初始化mpu前调用
+void GetDeveiceType(void)
+{
+  // 引脚识别设备类型
+  StaModeOpen();
+  switch (GetStaModeValue())
+  {
+  case 0:
+    *(uint32_t *)&myDevicType = 3; // meter
+    break;
+  case 1:
+    *(uint32_t *)&myDevicType = 7; // 3 phase meter
+    break;
+  }
+}
+__STATIC_INLINE int NVIC_GetIRQ(IRQn_Type IRQn)
+{
+  return NVIC->ISER[((uint32_t)(IRQn) >> 5)] & (1 << ((uint32_t)(IRQn) & 0x1F)); /* disable interrupt */
+}
+void SystemClock_Config(void)
+{
+}
+void RegisterMyInterrupt(void)
+{
+
+  // 将原有的vector注册到当前的系统中
+  void (**vec_fun)(void) = (void (**)(void))(0x10000000);
+  UINT32 intSave;
+  intSave = LOS_IntLock();
+  for (int i = 0; i < 46; i++)
+  {
+    // 本函数只是注册真实的开启和关闭中断由应用自己掌握
+    int flag = NVIC_GetIRQ((IRQn_Type)i);
+    LOS_HwiCreate(i, 4, 0, vec_fun[16 + i], NULL);
+    if (flag)
+    {
+      NVIC_EnableIRQ((IRQn_Type)i);
+    }
+    else
+    {
+      NVIC_DisableIRQ((IRQn_Type)i);
+    }
+  }
+  LOS_IntRestore(intSave);
+  debug_ready();
+}
+UINT32 CreateTaskID1;
+void App_CreateTask(void)
+{
+  srand(getTrngRand());
+  CloseClockGate();
+  // 调用底层初始化
+  BSP_Init();
+  DebugOpen(115200);
+  while (1)
+  {
+    FeedWdg();
+    LOS_TaskDelay(20); // 20ms延时
+  }
+}
+static void App_CreateTaskInit(void)
+{
+  TSK_INIT_PARAM_S stTask = {0};
+  int ret;
+  stTask.pfnTaskEntry = (TSK_ENTRY_FUNC)App_CreateTask;
+  stTask.uwStackSize = 4096;
+  stTask.pcName = "HelloWorld";
+  stTask.usTaskPrio = 6;
+  ret = LOS_TaskCreate(&CreateTaskID1, &stTask);
+  if (ret != LOS_OK)
+  {
+    __BKPT(1);
+  }
+}
+SYS_RUN(App_CreateTaskInit);
+/** Public application code --------------------------------------------------*/
+/*******************************************************************************
+ *
+ *       Public code
+ *
+ ********************************************************************************
+ */
+
+/**
+ * @brief 主入口函数
+ *
+ * @return int
+ */
+int main(void)
+{
+#if LOSCFG_COMPILE_DEBUG
+  WDG_Disable();
 #endif
+
+  QSPI_Enable();
+  FLASH_CMD_CONFIG();
+  GetDeveiceType();
+  FLASH_Init();
+  FLASH_Reset();
+  FLASH_Close();
+  GetDevFlashID();
+  Protection1MFlashNoVolatile();
+  DataFlashInit();
+  Protection1MFlash();
+  //	FLASH_WriteQeFlag();
+  DataFlashClose();
+  HAL_Init();
+
+  /* 初始化串口 */
+  // UART_Init();
+
+  printf("entry user main!\r\n");
+
+  /* DFX子系统日志输出接口初始化 */
+  Hilog_Init();
+
+  /* 内核初始化 */
+  uint32_t ret = LOS_OK;
+  ret = LOS_KernelInit();
+  if (LOS_OK != ret)
+  {
+    Error_Handler();
+  }
+RegisterMyInterrupt();
+#if (LOSCFG_USE_SHELL == 1)
+  ret = LosShellInit();
+  if (LOS_OK != ret)
+  {
+    printf("LosShellInit failed! ERROR: 0x%x\n", ret);
+  }
+  ret = OsShellInit();
+  if (LOS_OK != ret)
+  {
+    printf("OsShellInit failed! ERROR: 0x%x\n", ret);
+  }
+#endif
+
+  /* 初始化fs */
+  FsInit();
+
+  /* 鸿蒙系统初始化 */
+  OHOS_SystemInit();
+
+#if LOSCFG_DRIVERS_HDF
+  // DeviceManagerStart();
+#endif
+
+  /* 执行gpio测试 */
+  // GS_Gpio_Test();
+  /* 执行littlefs测试 */
+  // StartHdfSpiLittlefsTest();
+
+  /* 创建任务 */
+  // TaskSample();
+
+  /* 使用OS中断处理 */
+  NVIC_SetVector(SysTick_IRQn, (uint32_t)OsTickHandler);
+
+  /* 启动内核 */
+  LOS_Start();
+  while (1)
+  {
+    printf("Start LiteOS Error\r\n");
+  }
+}
+
+#ifdef __cplusplus /**< end extern c */
+}
+#endif
+/******************************** End of file *********************************/

@@ -146,109 +146,109 @@ g_pfnVectors:
   .word  0
   .word  0
   .word  0
-  .word  SVC_Handler
+  .word  HalExcSvcCall
   .word  DebugMon_Handler
   .word  0
   .word  HalPendSV
   .word  SysTick_Handler
 
   /* External Interrupts */
-  .word     SYSC_Handler
-  .word     WWDG_Handler
-  .word     IWDG_Handler
-  .word     TMR1_1_Handler
-  .word     TMR1_2_Handler
-  .word     TMR1_3_Handler
-  .word     TMR1_4_Handler
-  .word     TMR1_5_Handler
-  .word     TMR1_6_Handler
-  .word     TMR0_1_Handler
-  .word     TMR0_2_Handler
-  .word     TMR0_3_Handler
-  .word     TMR0_4_Handler
-  .word     TMR0_5_Handler
-  .word     TMR0_6_Handler
-  .word     DMAC_Handler
-  .word     DMAC_TC_Handler
-  .word     UART0_Handler
-  .word     UART1_Handler
-  .word     UART2_Handler
-  .word     GPIO0_Handler
-  .word     GPIO1_Handler
-  .word     IIC0_Handler
-  .word     UART3_Handler
-  .word     IIC1_Handler
-  .word     0
-  .word     SSP0_Handler
-  .word     SSP1_Handler
-  .word     ADCC_Handler
-  .word     0
-  .word     SPI0_Handler
-  .word     BPLC_IRQHandler
-  .word     NTB_IRQHandler
-  .word     CRC_Handler
-  .word     MAC_Handler
-  .word     AES_Handler
-  .word     CRY_Handler
-  .word     SHA_Handler
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0
-  .word     0//38-70 33个
-  .word     EXTI0_Handler
-  .word     EXTI1_Handler
-  .word     EXTI2_Handler
-  .word     EXTI3_Handler
-  .word     EXTI4_Handler
-  .word     EXTI5_Handler
-  .word     EXTI6_Handler
-  .word     EXTI7_Handler
-  .word     EXTI8_Handler
-  .word     EXTI9_Handler
-  .word     EXTI10_Handler
-  .word     EXTI11_Handler
-  .word     EXTI12_Handler
-  .word     EXTI13_Handler
-  .word     EXTI14_Handler
-  .word     EXTI15_Handler
-  .word     EXTI16_Handler
-  .word     EXTI17_Handler
-  .word     EXTI18_Handler
-  .word     EXTI19_Handler
-  .word     EXTI20_Handler
-  .word     EXTI21_Handler
-  .word     EXTI22_Handler
-  .word     EXTI23_Handler
-  .word     EXTI24_Handler
+  .word  SYSC_Handler
+  .word  WWDG_Handler
+  .word  IWDG_Handler
+  .word  TMR1_1_Handler
+  .word  TMR1_2_Handler
+  .word  TMR1_3_Handler
+  .word  TMR1_4_Handler
+  .word  TMR1_5_Handler
+  .word  TMR1_6_Handler
+  .word  TMR0_1_Handler
+  .word  TMR0_2_Handler
+  .word  TMR0_3_Handler
+  .word  TMR0_4_Handler
+  .word  TMR0_5_Handler
+  .word  TMR0_6_Handler
+  .word  DMAC_Handler
+  .word  DMAC_TC_Handler
+  .word  UART0_Handler
+  .word  UART1_Handler
+  .word  UART2_Handler
+  .word  GPIO0_Handler
+  .word  GPIO1_Handler
+  .word  IIC0_Handler
+  .word  UART3_Handler
+  .word  IIC1_Handler
+  .word  0
+  .word  SSP0_Handler
+  .word  SSP1_Handler
+  .word  ADCC_Handler
+  .word  0
+  .word  SPI0_Handler
+  .word  BPLC_IRQHandler
+  .word  NTB_IRQHandler
+  .word  CRC_Handler
+  .word  MAC_Handler
+  .word  AES_Handler
+  .word  CRY_Handler
+  .word  SHA_Handler
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  0//38-70 33个
+  .word  EXTI0_Handler
+  .word  EXTI1_Handler
+  .word  EXTI2_Handler
+  .word  EXTI3_Handler
+  .word  EXTI4_Handler
+  .word  EXTI5_Handler
+  .word  EXTI6_Handler
+  .word  EXTI7_Handler
+  .word  EXTI8_Handler
+  .word  EXTI9_Handler
+  .word  EXTI10_Handler
+  .word  EXTI11_Handler
+  .word  EXTI12_Handler
+  .word  EXTI13_Handler
+  .word  EXTI14_Handler
+  .word  EXTI15_Handler
+  .word  EXTI16_Handler
+  .word  EXTI17_Handler
+  .word  EXTI18_Handler
+  .word  EXTI19_Handler
+  .word  EXTI20_Handler
+  .word  EXTI21_Handler
+  .word  EXTI22_Handler
+  .word  EXTI23_Handler
+  .word  EXTI24_Handler
 
 
 /*******************************************************************************
@@ -273,8 +273,8 @@ g_pfnVectors:
    .weak      HalExcUsageFault
    .thumb_set HalExcUsageFault,Default_Handler
 
-   .weak      SVC_Handler
-   .thumb_set SVC_Handler,Default_Handler
+   .weak      HalExcSvcCall
+   .thumb_set HalExcSvcCall,Default_Handler
 
    .weak      DebugMon_Handler
    .thumb_set DebugMon_Handler,Default_Handler

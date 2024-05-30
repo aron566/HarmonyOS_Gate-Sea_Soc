@@ -11,16 +11,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#if (ohos_kernel_type == "liteos_m") {
+#  import("//drivers/hdf_core/adapter/khdf/liteos_m/hdf.gni")
+#  module_switch = defined(LOSCFG_GS2000_ZB202_BOARD_USE_HDF)
+#  macro_switch = defined(LOSCFG_DRIVERS_HDF_CONFIG_MACRO)
+#  module_name = get_path_info(rebase_path("."), "name")
+#  config("public") {
+#    include_dirs = [ "$target_gen_dir" ]
+#  }
+#  hdf_driver(module_name) {
+#    hcs_sources = [ "hdf.hcs" ]
+#    special_visibility = [ "//device/board/gate_sea/gs2000_zb202_board/liteos_m/*" ]
+#  }
+#}
+
 if (ohos_kernel_type == "liteos_m") {
   import("//drivers/hdf_core/adapter/khdf/liteos_m/hdf.gni")
-  module_switch = defined(LOSCFG_GS2000_BOARD_USE_HDF)
-  macro_switch = defined(LOSCFG_DRIVERS_HDF_CONFIG_MACRO)
+
   module_name = get_path_info(rebase_path("."), "name")
-  config("public") {
-    include_dirs = [ "$target_gen_dir" ]
-  }
   hdf_driver(module_name) {
-    hcs_sources = [ "hdf.hcs" ]
-    special_visibility = [ "//device/board/gate_sea/gs2000xx_board/liteos_m/*" ]
+    hcs_sources = [ "gs2000_zb202_board.hcs" ]
   }
 }

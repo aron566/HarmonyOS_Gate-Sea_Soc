@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-config GD32F4_BOARD_USE_HDF
-    bool "gd32f4_board_hdf"
-    depends on BOARD_GD32F470Z_BOARD
+config GS2000_ZB202_BOARD_USE_HDF
+    bool "gs2000_board_hdf"
+    depends on BOARD_GS2000_ZB202_BOARD
     #select DRIVERS_HDF_PLATFORM_I2C
