@@ -1,0 +1,20 @@
+root {
+    platform {
+        i2c_config{
+            match_attr = "gd32f4xx_i2c_0";
+            template i2c_controller {
+                bus = 0;
+                irq = 0;
+            }
+            controller_0 :: i2c_controller {
+                match_attr = "gd32f4xx_i2c_0";
+                bus = 0;
+                sclpin_group = 1;  // GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                sdapin_group = 1;  // GPIO组 0:GPIOA 1:GPIOB 2:GPIOC 3:GPIOD 4:GPIOE 5: GPIOF 6:GPIOG 7:GPIOH 8:GPIOI
+                sclpin = 6;        // GPIO管脚0-15
+                sdapin = 7;        // GPIO管脚0-15
+                speed = 400000;    // I2C速度
+            }
+        }
+    }
+}

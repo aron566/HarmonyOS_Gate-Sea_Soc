@@ -22,11 +22,11 @@ kernel_module(module_name) {
       "src/fs_init_sdk.c",
       #"src/w25qxx.c",
       #"src/qspi.c",
-      #"src/littlefs.c",
+      "src/littlefs_port.c",
     ]
     #if (defined(LOSCFG_MTHS_USE_HDF) &&
     #    defined(LOSCFG_DRIVERS_HDF_CONFIG_MACRO)) {
-    #  deps = [ "//device/board/csg/stm32f4xx_board/liteos_m/hdf_config" ]
+    #  deps = [ "//device/board/gate_sea/gs2100_zb205_board/liteos_m/hdf_config" ]
     #}
   }
 }
@@ -36,7 +36,7 @@ config("public") {
   if (defined(LOSCFG_FS_LITTLEFS)) {
     include_dirs = [
       "include",
-      "//device/board/csg/stm32l4_board/liteos_m/bsp/include",
+      "//device/board/gate_sea/gs2100_zb205_board/liteos_m/bsp/include",
       "//drivers/hdf_core/framework/include/platform",
       "//drivers/hdf_core/framework/include/utils",
       "//drivers/hdf_core/adapter/khdf/liteos_m/osal/include",

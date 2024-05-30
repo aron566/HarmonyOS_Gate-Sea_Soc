@@ -19,7 +19,8 @@ if (ohos_kernel_type == "liteos_m") {
   module_group(module_name) {
     modules = [
       "liteos_m",
-      #"applications",
+      "application",
+      "utils",
     ]
   }
 
@@ -41,12 +42,15 @@ if (ohos_kernel_type == "liteos_m") {
     ldflags = [
       "-Wl,--gc-sections",
       "-Wl,-Map=bin/$output_name.map",
+      "-Wl,--start-group",
+      "-Wl,--end-group",
     ]
 
     deps = []
 
     ldflags += [
       "-L" + "${out_product_path}/libs",
+      "-Wl,--print-memory-usage",
     ]
 
     print(ldflags)

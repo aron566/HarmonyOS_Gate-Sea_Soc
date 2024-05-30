@@ -1,0 +1,24 @@
+root {
+    platform {
+        dac_config {
+            dac0_config {
+                match_attr = "gd32f4xx_dac_config0";
+                template dac_device {
+                    deviceNum = 0;
+                    dacNum = 0; // 0:DAC 1:DAC1
+                    validChannel = 0;
+                }
+                device_0 :: dac_device {
+                    deviceNum = 0;
+                    dacNum = 0; // 0:DAC 1:DAC1
+                    validChannel = 0;//0:DAC_CHANNEL_1
+                }
+                device_1 :: dac_device {
+                    deviceNum = 1;
+                    dacNum = 1; // 0:DAC 1:DAC1
+                    validChannel = 1;//0:DAC_CHANNEL_1
+                }
+            }
+        }
+    }
+}

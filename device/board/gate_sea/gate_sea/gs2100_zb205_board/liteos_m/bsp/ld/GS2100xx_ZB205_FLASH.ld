@@ -14,7 +14,7 @@
 **
 **                Set memory bank area and size if external memory is used.
 **
-**  Target      : Gate-Sea GS2100xx
+**  Target      : Gate-Sea GS2000xx
 **
 **  Distribution: The file is distributed “as is,” without any warranty
 **                of any kind.
@@ -53,17 +53,16 @@
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = ORIGIN(RAM) + LENGTH(RAM);    /* end of RAM */
+/*_estack = ORIGIN(RAM) + LENGTH(RAM);    /* end of RAM */
 /* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0x1000;      /* required amount of heap  */
-_Min_Stack_Size = 0x1000; /* required amount of stack */
+_Min_Heap_Size = 0x100;      /* required amount of heap  */
+_Min_Stack_Size = 0x2000; /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
 {
-  RAM_CODE (xrw)    : ORIGIN = 0x10000200, LENGTH = 0x47DFF /* for code & const data range:0x10000200 - 0x10047FFF */
-  FLASH (rx)        : ORIGIN = 0x10000000, LENGTH = 0x200 /* it vector */
-  RAM (xrw)         : ORIGIN = 0x10048000, LENGTH = 736K  /* for data & zero data range:0x10048000 - 0x100FFFFF */
+  FLASH (rx)      : ORIGIN = 0x10000000, LENGTH = 512K
+  RAM (xrw)      : ORIGIN = 0x10080000, LENGTH = 512K
 }
 
 /* Define output sections */
@@ -96,7 +95,7 @@ SECTIONS
 
     . = ALIGN(4);
     _etext = .;        /* define a global symbols at end of code */
-  } >RAM_CODE
+  } >FLASH
 
   .zinitcall_array :
   {
@@ -150,7 +149,7 @@ SECTIONS
     KEEP (*(SORT(.zinitcall.exit*)))
     KEEP (*(.zinitcall.exit*))
     PROVIDE_HIDDEN (__zinitcall_exit_end = .);
- } > RAM_CODE
+ } > FLASH
 
   /* Constant data goes into FLASH */
   .rodata :
@@ -159,35 +158,36 @@ SECTIONS
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     . = ALIGN(4);
-  } >RAM_CODE
+  } >FLASH
 
   .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
   .ARM : {
     __exidx_start = .;
     *(.ARM.exidx*)
     __exidx_end = .;
-  } >RAM_CODE
+  } >FLASH
 
   .preinit_array     :
   {
     PROVIDE_HIDDEN (__preinit_array_start = .);
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
-  } >RAM_CODE
+  } >FLASH
   .init_array :
   {
     PROVIDE_HIDDEN (__init_array_start = .);
     KEEP (*(SORT(.init_array.*)))
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
-  } >RAM_CODE
+  } >FLASH
   .fini_array :
   {
     PROVIDE_HIDDEN (__fini_array_start = .);
     KEEP (*(SORT(.fini_array.*)))
     KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
-  } >RAM_CODE
+    __FLASH_END = .;
+  } >FLASH
 
   /* used by the startup to initialize data */
   _sidata = LOADADDR(.data);
@@ -202,7 +202,7 @@ SECTIONS
 
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
-  } >RAM
+  } > RAM AT > FLASH
 
   /* Uninitialized data section */
   . = ALIGN(4);
@@ -228,6 +228,7 @@ SECTIONS
     PROVIDE ( _end = . );
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
+    PROVIDE( _estack = . );
     . = ALIGN(8);
   } >RAM
 
@@ -235,6 +236,12 @@ SECTIONS
 
   __los_heap_addr_start__ = .;
   __los_heap_addr_end__ = ORIGIN(RAM) + LENGTH(RAM);
+
+  /* total size */
+  __FLASH_USED = ORIGIN(FLASH) + LENGTH(FLASH) -  __FLASH_END;
+  __RAM_RW_USED = ORIGIN(RAM) + LENGTH(RAM) -  _end;
+  __RAM_STACK_USED = _Min_Stack_Size;
+  __LOS_HEAP_USED = __los_heap_addr_end__ - __los_heap_addr_start__;
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {

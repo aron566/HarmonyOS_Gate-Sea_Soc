@@ -18,5 +18,7 @@ module_group(module_name) {
   modules = [
     "bsp",
     "fs",
+    #"hdf_config",
+    #"hdf_drivers",
   ]
 }

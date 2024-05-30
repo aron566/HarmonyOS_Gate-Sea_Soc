@@ -15,6 +15,6 @@ config SOC_SERIES_GS2100xx
     bool "Gate-Sea GS2100xx series"
     select ARCH_ARM
     select SOC_COMPANY_GATE_SEA
-    select CPU_CORTEX_M4
+    select CPU_CORTEX_M3
     help
         Enable support for Gate-Sea GS2100xx series

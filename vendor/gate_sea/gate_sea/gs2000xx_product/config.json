@@ -19,7 +19,7 @@
       "components": [
         { "component": "hilog_lite", "features":[] },
         { "component": "hievent_lite", "features":[] },
-        { "component": "hiview_lite", "features":[] }
+        { "component": "hiview_lite", "features":["ohos_hiviewdfx_hiview_lite_dir = \"/hiview/\""] }
       ]
     },
     {
@@ -43,7 +43,8 @@
         { "component": "init_lite", "features":
           [
             "enable_ohos_startup_init_feature_begetctl_liteos = true",
-            "enable_ohos_startup_init_lite_use_thirdparty_mbedtls = true"
+            "enable_ohos_startup_init_lite_use_thirdparty_mbedtls = true",
+            "config_ohos_startup_init_lite_data_path = \"/data/\""
           ]
         }
       ]
