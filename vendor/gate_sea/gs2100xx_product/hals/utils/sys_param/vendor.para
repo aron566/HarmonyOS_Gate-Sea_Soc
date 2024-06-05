@@ -11,28 +11,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-const.build.characteristics=Board
+const.build.characteristics==****
 
-const.product.manufacturer==****
+const.product.manufacturer=NWKJ
 
-const.product.brand==****
+const.product.brand=PowerHarmony+ PHM V1.0
 
-const.product.name==****
+const.product.name=HPLC&HRF Borad
 
-const.build.product==****
+const.build.product=2103230411001
 
-const.product.model==****
+const.product.model=GS2100xxZB205
 
-const.product.hardwareversion==****
+const.product.hardwareversion=DGRI-STMT-V1.0
 
-const.product.hardwareprofile==****
+const.product.hardwareprofile=****
 
-const.ohos.serial=1234567890
+const.ohos.serial=GS2100xx854567854521
 
-const.product.bootloader.version==****
+const.product.bootloader.version=bootloader
 
-const.product.cpu.abilist==****
-
-const.product.software.version==****
+const.product.cpu.abilist=****
 
 const.product.firstapiversion=1

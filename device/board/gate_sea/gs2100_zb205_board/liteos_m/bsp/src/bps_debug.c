@@ -12,8 +12,8 @@
 #include "ohos_init.h"
 #include "ohos_types.h"
 #include "los_task.h"
-#define MAX_DEBUG_BUFFER (4096)
-#define MAX_DEBUG_TEMP (512)
+#define MAX_DEBUG_BUFFER (8096)
+#define MAX_DEBUG_TEMP (5120)
 
 static uint8_t debug_buffer[MAX_DEBUG_BUFFER];
 static char debug_temp[MAX_DEBUG_TEMP];

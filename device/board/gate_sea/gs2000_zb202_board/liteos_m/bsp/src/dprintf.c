@@ -61,7 +61,7 @@ extern "C" {
  ********************************************************************************
  */
 #if 1
-static bool HilogProc_Impl(const HiLogContent *hilogContent, uint32_t len)
+static boolean HilogProc_Impl(const HiLogContent *hilogContent, uint32 len)
 {
   char tempOutStr[LOG_FMT_MAX_LEN];
   tempOutStr[0] = 0,tempOutStr[1] = 0;
@@ -98,9 +98,11 @@ static void dputs(char const *s, int (*pFputc)(int n, FILE *cookie), void *cooki
  *
  ********************************************************************************
  */
-static char Str_Buffer[256U];
+
 int hal_trace_printf(uint32_t attr, const char *fmt, ...)
 {
+#if 1
+  static char Str_Buffer[256U];
   // if (attr > PRINT_LEVEL)
   // {
   //   return;
@@ -121,6 +123,11 @@ int hal_trace_printf(uint32_t attr, const char *fmt, ...)
   }
   va_end(ap);
   return len;
+#else
+  va_list ap;
+  va_start(ap, fmt);
+  return printf(fmt, ap);
+#endif
 }
 
 int printf(char const *fmt, ...)
@@ -128,7 +135,7 @@ int printf(char const *fmt, ...)
   char    buf[256U] = {0};
   va_list ap;
   va_start(ap, fmt);
-  int len = vsnprintf_s(buf, sizeof(buf), sizeof(buf) - 1U, fmt, ap);
+  int len = vsnprintf(buf, sizeof(buf), fmt, ap);
   if (len > 0)
   {
     dputs(buf, fputc, 0);

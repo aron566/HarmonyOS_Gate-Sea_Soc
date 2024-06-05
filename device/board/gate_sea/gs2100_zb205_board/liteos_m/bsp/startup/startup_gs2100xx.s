@@ -39,6 +39,7 @@
 .extern HalPendSV;
 .extern SysTick_Handler;
 
+
 .global  g_pfnVectors
 .global  Default_Handler
 
@@ -201,8 +202,8 @@ g_pfnVectors:
   .word Timer10IsrFunction //40
   .word Timer11IsrFunction //41
   .word DetectADC12VIrq//42
-  .word 0  //43
-  .word 0  //44
+  .word Default_Handler//0  //43
+  .word Default_Handler//0  //44
   .word HRF_dfe_interrupt_handler //45
 
 

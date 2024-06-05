@@ -14,7 +14,9 @@
  *  @copyright Copyright (c) 2024  Suzhou Gate-Sea Co.,Ltd.
  */
 /** Includes -----------------------------------------------------------------*/
-#include "stdio.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 /* Private includes ----------------------------------------------------------*/
 #include "los_config.h"
 #include "ohos_init.h"
@@ -25,6 +27,10 @@
 #include "gsmcu_hal.h"
 // #include "uart.h"
 #include "bsp.h"
+#include "apdma.h"
+#include "gsmcu_trng.h"
+#include "system_GSMCU_M3.h"
+#include "serial_port.h"
 /** Use C compiler -----------------------------------------------------------*/
 #ifdef __cplusplus /**< use C compiler */
 extern "C" {
@@ -163,11 +169,7 @@ void RegisterMyInterrupt(void)
 UINT32 CreateTaskID1;
 void App_CreateTask(void)
 {
-  srand(getTrngRand());
-  CloseClockGate();
-  // 调用底层初始化
-  BSP_Init();
-  DebugOpen(115200);
+
   while (1)
   {
     FeedWdg();
@@ -204,6 +206,9 @@ SYS_RUN(App_CreateTaskInit);
  */
 int main(void)
 {
+  /* 设置默认中断向量表 */
+  SCB->VTOR = (UINT32)(UINTPTR)0x10000000;
+
 #if LOSCFG_COMPILE_DEBUG
   WDG_Disable();
 #endif
@@ -218,12 +223,24 @@ int main(void)
   Protection1MFlashNoVolatile();
   DataFlashInit();
   Protection1MFlash();
-  //	FLASH_WriteQeFlag();
+
+  // FLASH_WriteQeFlag();
+
   DataFlashClose();
   HAL_Init();
 
-  /* 初始化串口 */
-  // UART_Init();
+  // srand(getTrngRand());
+  CloseClockGate();
+
+  /* 初始化DMA GPIO等 */
+  BSP_Init();
+
+  /* 串口 */
+  DebugOpen(115200);
+  debug_ready();
+
+  /* 初始化串口 3 */
+  Serial_Port_Init();
 
   printf("entry user main!\r\n");
 
@@ -237,7 +254,10 @@ int main(void)
   {
     Error_Handler();
   }
-RegisterMyInterrupt();
+
+  /* 中断导入os */
+  RegisterMyInterrupt();
+
 #if (LOSCFG_USE_SHELL == 1)
   ret = LosShellInit();
   if (LOS_OK != ret)
@@ -258,7 +278,7 @@ RegisterMyInterrupt();
   OHOS_SystemInit();
 
 #if LOSCFG_DRIVERS_HDF
-  // DeviceManagerStart();
+  DeviceManagerStart();
 #endif
 
   /* 执行gpio测试 */
@@ -269,8 +289,10 @@ RegisterMyInterrupt();
   /* 创建任务 */
   // TaskSample();
 
+#if LOSCFG_USE_SYSTEM_DEFINED_INTERRUPT == 0
   /* 使用OS中断处理 */
   NVIC_SetVector(SysTick_IRQn, (uint32_t)OsTickHandler);
+#endif
 
   /* 启动内核 */
   LOS_Start();

@@ -114,6 +114,9 @@ void TaskSample(void)
  */
 int main(void)
 {
+  /* 设置默认中断向量表 */
+  SCB->VTOR = (UINT32)(UINTPTR)0x10000000;
+
 #if LOSCFG_COMPILE_DEBUG
   WDG_Disable();
 #endif
@@ -150,15 +153,15 @@ int main(void)
   }
 #endif
 
+  /* 初始化fs */
+  FsInit();
+
   /* 鸿蒙系统初始化 */
-  // OHOS_SystemInit();
+  OHOS_SystemInit();
 
 #if LOSCFG_DRIVERS_HDF
   DeviceManagerStart();
 #endif
-
-  /* 初始化fs */
-  FsInit();
 
   /* 执行gpio测试 */
   // GS_Gpio_Test();
@@ -310,6 +313,9 @@ void TaskSample(void)
  */
 int main(void)
 {
+  /* 设置默认中断向量表 */
+  SCB->VTOR = (UINT32)(UINTPTR)0x10000000;
+
 #if LOSCFG_COMPILE_DEBUG
   WDG_Disable();
 #endif
@@ -487,6 +493,9 @@ void TaskSample(void)
  */
 int main(void)
 {
+  /* 设置默认中断向量表 */
+  SCB->VTOR = (UINT32)(UINTPTR)0x10000000;
+
 #if LOSCFG_COMPILE_DEBUG
   WDG_Disable();
 #endif

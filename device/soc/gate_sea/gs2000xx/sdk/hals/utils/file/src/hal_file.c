@@ -214,7 +214,7 @@ int HalFileOpen(const char *path, int oflag, int mode)
   {
     return HAL_ERROR;
   }
-
+  // printf("HalFileOpen File:%s\r\n", file_path);
   fd = open(file_path, ConvertFlags(oflag));
   if (fd < 0)
   {

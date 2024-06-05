@@ -24,6 +24,12 @@
 extern "C" {
 #endif
 /** Private macros -----------------------------------------------------------*/
+
+#define FLASH_FILE_ADDR   0x12080000U/**< 用于文件系统的起始存储地址 */
+#define FLASH_FILE_SIZE   0x8000U    /**< 用于文件系统的大小 */
+#define FLASH_BLOCK_SIZE  0x1000U    /**< flash块大小 */
+
+
 // flash boot
 #define FLASH_START_ADDR (0x12000000UL)
 
@@ -338,7 +344,7 @@ void Protection512KFlashNoVolatile(void)
  */
 uint32_t Littlefs_Port_Get_Start_Addr(void)
 {
-  uint32_t Start_Addr = STA_READ_GRAPH_DATA + STA_READ_GRAPH_DATA_SIZE;
+  uint32_t Start_Addr = FLASH_FILE_ADDR;
   Start_Addr += ((DATA_FLASH_SECTION_SIZE - (Start_Addr % DATA_FLASH_SECTION_SIZE)) % DATA_FLASH_SECTION_SIZE);
   return Start_Addr;
 }

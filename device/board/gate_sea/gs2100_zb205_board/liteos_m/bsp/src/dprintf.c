@@ -71,7 +71,7 @@ static boolean HilogProc_Impl(const HiLogContent *hilogContent, uint32 len)
   }
   return true;
 }
-
+extern uint8_t vector_init;
 /**
  * @brief 输出字符串
  *
@@ -99,20 +99,105 @@ static void dputs(char const *s, int (*pFputc)(int n, FILE *cookie), void *cooki
  ********************************************************************************
  */
 
+// int hal_trace_printf(uint32_t attr, const char *fmt, ...)
+// {
+// #if 1
+//   static char Str_Buffer[256U];
+//   // if (attr > PRINT_LEVEL)
+//   // {
+//   //   return;
+//   // }
+//   // char    buf[1024U] = {0};
+//   va_list ap;
+//   va_start(ap, fmt);
+//   int len = vsnprintf_s(Str_Buffer, sizeof(Str_Buffer), sizeof(Str_Buffer) - 1U, fmt, ap);
+//   if (len > 0)
+//   {
+//     dputs(Str_Buffer, fputc, 0);
+//   }
+//   else
+//   {
+//     dputs("hal printf error!\r\n", fputc, 0);
+//     // Str_Buffer[0] = '[';
+//     // dputs(Str_Buffer, fputc, 0);
+//   }
+//   va_end(ap);
+//   return len;
+// #else
+//   va_list ap;
+//   va_start(ap, fmt);
+//   return printf(fmt, ap);
+// #endif
+// }
+
+// int printf(char const *fmt, ...)
+// {
+//   char Str_Buffer[256U] = {0};
+//   va_list ap;
+//   va_start(ap, fmt);
+//   int len = vsnprintf(Str_Buffer, sizeof(Str_Buffer), fmt, ap);
+//   if (len > 0)
+//   {
+//     dputs(Str_Buffer, fputc, 0);
+//   }
+//   else
+//   {
+//     dputs("printf error!\n", fputc, 0);
+//   }
+//   va_end(ap);
+//   return len;
+// }
+
 int hal_trace_printf(uint32_t attr, const char *fmt, ...)
 {
   // if (attr > PRINT_LEVEL)
   // {
   //   return;
   // }
+
+  static char Str_Buffer[256U];
+  // if (attr > PRINT_LEVEL)
+  // {
+  //   return;
+  // }
+  // char    buf[1024U] = {0};
   va_list ap;
+  va_start(ap, fmt);
+  int len = vsnprintf_s(Str_Buffer, sizeof(Str_Buffer), sizeof(Str_Buffer) - 1U, fmt, ap);
+  if (len > 0)
+  {
+    dputs(Str_Buffer, fputc, 0);
+  }
+  else
+  {
+    dputs("hal printf error!\r\n", fputc, 0);
+    // Str_Buffer[0] = '[';
+    // dputs(Str_Buffer, fputc, 0);
+  }
+  va_end(ap);
+
+  // va_list ap;
   va_start(ap, fmt);
   return re_printf(fmt, ap);
 }
 
 int printf(char const *fmt, ...)
 {
+  char Str_Buffer[256U] = {0};
   va_list ap;
+  va_start(ap, fmt);
+  int len = vsnprintf(Str_Buffer, sizeof(Str_Buffer), fmt, ap);
+  if (len > 0)
+  {
+    dputs(Str_Buffer, fputc, 0);
+  }
+  else
+  {
+    dputs("printf error!\n", fputc, 0);
+  }
+  va_end(ap);
+
+  // va_list ap;
   va_start(ap, fmt);
   return re_printf(fmt, ap);
 }

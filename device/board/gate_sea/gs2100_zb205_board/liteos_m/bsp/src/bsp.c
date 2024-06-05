@@ -192,7 +192,9 @@ void    BSP_Init(void)
   // UART1Init_Debug();
 
   // watch dog
+#if LOSCFG_COMPILE_DEBUG == 0
   InitWdg();
+#endif
   /* PLLCLK    = HSE * (PLLN / PLLM)      = 336MHz.       */
   /* SYSCLK    = PLLCLK / PLLP            = 168MHz.       */
   /* OTG_FSCLK = PLLCLK / PLLQ            =  48MHz.       */

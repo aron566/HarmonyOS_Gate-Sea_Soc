@@ -64,8 +64,10 @@ MEMORY
   FLASH (rx)        : ORIGIN = 0x10000000, LENGTH = 0x200 /* it vector in RAM */
   /*RAM_CODE (xrw)    : ORIGIN = 0x10000200, LENGTH = 0x2FE00*/ /* for code & const data range:0x10000200 - 0x1002FFFF */
   /*RAM (xrw)         : ORIGIN = 0x10030000, LENGTH = 576K*/ /* for data & zero data range:0x10030000 - 0x100BFFFF */
-  RAM_CODE (rx)     : ORIGIN = 0x10000200, LENGTH = 0x48E00 + 76K
-  RAM (xrw)         : ORIGIN = 0x10049000 + 76K, LENGTH = 476K - 76K
+  /* RAM_CODE (rx)     : ORIGIN = 0x10000200, LENGTH = 0x48E00 + 76K
+  RAM (xrw)         : ORIGIN = 0x10049000 + 76K, LENGTH = 476K - 76K */
+  RAM_CODE (rx)     : ORIGIN = 0x10000200, LENGTH = 0x48E00 + 76K + 65K + 60K + 137K
+  RAM (xrw)         : ORIGIN = 0x10049000 + 76K + 65K + 60K + 137K, LENGTH = 476K - 76K - 65K - 60K - 137K
 }
 
 /* Define output sections */

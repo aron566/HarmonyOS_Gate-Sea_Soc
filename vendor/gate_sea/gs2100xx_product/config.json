@@ -12,7 +12,7 @@
       "subsystem": "kernel",
       "components": [
          { "component": "liteos_m", "features": [] }
-         
+
       ]
     },
     {
@@ -32,8 +32,7 @@
     {
       "subsystem": "commonlibrary",
       "components": [
-        { "component": "file", "features":[] },
-        { "component": "kal_timer", "features":[] }
+        { "component": "file", "features":[] }
       ]
     },
     {
